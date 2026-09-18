@@ -515,7 +515,12 @@ spans:
     note: |
       The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-      Examples: OpenAI Assistants API, AWS Bedrock Agents.
+      A client span describes invoking a remote or hosted agent service across a
+      network boundary (e.g. OpenAI Assistants API, AWS Bedrock Agents, Google Cloud
+      Vertex AI Reasoning Engine, Azure AI Foundry Agent Service, or a remote agent microservice).
+
+      For agent invocations executing locally within the same process, instrumentations
+      SHOULD use `gen_ai.invoke_agent.internal` instead.
     stability: development
     attributes:
       - ref_group: attributes.gen_ai.invoke_agent.common
@@ -559,7 +564,11 @@ spans:
     note: |
       The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-      Examples: LangChain agents, CrewAI agents.
+      An internal span describes executing an agent locally within the calling process
+      (e.g. LangChain, CrewAI, AutoGen, or Google ADK agents).
+
+      For agent invocations across a network boundary to a remote service,
+      instrumentations SHOULD use `gen_ai.invoke_agent.client` instead.
     stability: development
     attributes:
       - ref_group: attributes.gen_ai.invoke_agent.common
