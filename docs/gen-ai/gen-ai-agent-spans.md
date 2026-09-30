@@ -10,7 +10,6 @@ linkTitle: Agent spans
 
 - [Semantic Conventions for GenAI agent and framework spans](#semantic-conventions-for-genai-agent-and-framework-spans)
   - [Spans](#spans)
-    - [Distributed and multi-tier agent architectures](#distributed-and-multi-tier-agent-architectures)
     - [Create agent span](#create-agent-span)
     - [Invoke agent client span](#invoke-agent-client-span)
     - [Invoke agent internal span](#invoke-agent-internal-span)
@@ -27,25 +26,6 @@ This document defines semantic conventions for GenAI agent and framework operati
 The semantic conventions for GenAI agents extend and override the semantic conventions for [Gen AI Spans](gen-ai-spans.md).
 
 ## Spans
-
-GenAI agent execution models fall into two primary categories:
-
-- **Out-of-process and remote (hosted) agents (`CLIENT` kind)**:
-  An application or orchestrator invokes an out-of-process, remote, or hosted agent service across a process boundary (e.g. over network protocols such as HTTP or gRPC, or local IPC). Examples include cloud-managed agent platforms (OpenAI Assistants API, AWS Bedrock Agents, Google Cloud Vertex AI Reasoning Engine, Azure AI Foundry Agent Service) or custom enterprise agent microservices. These invocations are instrumented using `gen_ai.invoke_agent.client` with span kind `CLIENT`, capturing caller-observed latency, transport errors, and high-level request parameters.
-
-- **Local (in-process) agents (`INTERNAL` kind)**:
-  An agent framework or library executes the agent reasoning loop directly within the calling process. Examples include in-process executions with LangChain, CrewAI, AutoGen, Semantic Kernel, and Google ADK. These invocations are instrumented using `gen_ai.invoke_agent.internal` with span kind `INTERNAL`, encapsulating the agent's internal orchestration loop, multi-step planning, decision making, and child operations (such as inference calls, tool executions, and memory operations).
-
-### Distributed and multi-tier agent architectures
-
-In multi-tier or distributed architectures, an application may invoke an out-of-process agent service that in turn executes an agent workflow internally:
-
-1. The client application creates an `invoke_agent` span with `CLIENT` kind (`gen_ai.invoke_agent.client`).
-2. Trace context is injected and propagated through the configured propagator across the process or network boundary (e.g. using W3C Trace Context over HTTP headers, gRPC metadata, or IPC context).
-3. The server-side service receives the request (typically creating an HTTP or RPC `SERVER` span) and instruments the local agent execution with an `invoke_agent` span with `INTERNAL` kind (`gen_ai.invoke_agent.internal`).
-4. Any child operations initiated by the agent (such as model inference calls via `chat` or tool executions via `execute_tool`) are nested under the server's `INTERNAL` span.
-
-When both sides of an out-of-process invocation are instrumented, both the `CLIENT` and `INTERNAL` spans MAY appear in the resulting distributed trace: the client span measures end-to-end caller-perceived duration and transport errors, while the internal span captures server-side execution details, reasoning cycles, and child operations. When only the client side is instrumented (e.g. calling a third-party managed agent platform without server-side telemetry access), only the `CLIENT` span is emitted.
 
 ### Create agent span
 
@@ -213,13 +193,15 @@ Describes GenAI agent invocation over a remote service.
 
 The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-A client span describes invoking an out-of-process, remote, or hosted agent
-service (e.g. over a network boundary such as OpenAI Assistants API, AWS Bedrock
-Agents, Google Cloud Vertex AI Reasoning Engine, Azure AI Foundry Agent Service,
-or over local IPC to a separate agent process).
+This span SHOULD be emitted if and only if the agent being invoked is not running
+in the same process as the instrumentation.
 
-For agent invocations executing locally within the same process, instrumentations
-SHOULD use `gen_ai.invoke_agent.internal` instead.
+For example, when instrumenting agent invocations against remote, managed,
+or other out-of-process agents such as OpenAI Assistants API, AWS Bedrock
+Agents, Gemini Enterprise Agent Platform, or Azure AI Foundry Agent Service.
+
+For agent invocations targeting local agents, refer to the
+`gen_ai.invoke_agent.internal` span.
 
 **Span name** SHOULD be `invoke_agent {gen_ai.agent.name}` if `gen_ai.agent.name` is readily available.
 When `gen_ai.agent.name` is not available, it SHOULD be `invoke_agent`.
@@ -570,11 +552,14 @@ Describes GenAI agent invocation within the same process.
 
 The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-An internal span describes executing an agent locally within the calling process
-(e.g. LangChain, CrewAI, AutoGen, or Google ADK agents).
+This span SHOULD be emitted if and only if the agent runs locally within the
+calling process.
+
+For example, when instrumenting agent invocations in frameworks such as LangChain,
+CrewAI, AutoGen, or Google ADK.
 
 For agent invocations targeting an out-of-process or remote agent service,
-instrumentations SHOULD use `gen_ai.invoke_agent.client` instead.
+refer to the `gen_ai.invoke_agent.client` span.
 
 **Span name** SHOULD be `invoke_agent {gen_ai.agent.name}` if `gen_ai.agent.name` is readily available.
 When `gen_ai.agent.name` is not available, it SHOULD be `invoke_agent`.
