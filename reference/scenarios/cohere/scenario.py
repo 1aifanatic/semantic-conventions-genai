@@ -11,6 +11,7 @@ from reference_shared import (
     flush_and_shutdown,
     mock_server_host_port,
     reference_event_logger,
+    reference_meter,
     reference_tracer,
     setup_otel,
 )
@@ -18,6 +19,17 @@ from reference_shared import (
 MOCK_BASE_URL = os.environ["MOCK_LLM_URL"]
 
 _reference_tracer = reference_tracer()
+_reference_meter = reference_meter()
+_input_tokens = _reference_meter.create_histogram(
+    "gen_ai.client.inference.operation.input_tokens",
+    unit="{token}",
+    description="The number of input (prompt) tokens used per inference operation.",
+)
+_output_tokens = _reference_meter.create_histogram(
+    "gen_ai.client.inference.operation.output_tokens",
+    unit="{token}",
+    description="The number of output (completion) tokens used per inference operation.",
+)
 
 
 def run_chat(client):
@@ -45,10 +57,12 @@ def run_chat(client):
         if hasattr(resp, "finish_reason") and resp.finish_reason:
             span.set_attribute("gen_ai.response.finish_reasons", [resp.finish_reason])
         if hasattr(resp, "usage") and resp.usage and hasattr(resp.usage, "billed_units") and resp.usage.billed_units:
-            if hasattr(resp.usage.billed_units, "input_tokens"):
+            if resp.usage.billed_units.input_tokens is not None:
                 span.set_attribute("gen_ai.usage.input_tokens", int(resp.usage.billed_units.input_tokens))
-            if hasattr(resp.usage.billed_units, "output_tokens"):
+                _input_tokens.record(int(resp.usage.billed_units.input_tokens), span_attributes)
+            if resp.usage.billed_units.output_tokens is not None:
                 span.set_attribute("gen_ai.usage.output_tokens", int(resp.usage.billed_units.output_tokens))
+                _output_tokens.record(int(resp.usage.billed_units.output_tokens), span_attributes)
 
         # Emit inference operation details event
         content = resp.message.content[0].text
@@ -72,9 +86,9 @@ def run_chat(client):
         if hasattr(resp, "finish_reason") and resp.finish_reason:
             event_attrs["gen_ai.response.finish_reasons"] = [resp.finish_reason]
         if hasattr(resp, "usage") and resp.usage and hasattr(resp.usage, "billed_units") and resp.usage.billed_units:
-            if hasattr(resp.usage.billed_units, "input_tokens"):
+            if resp.usage.billed_units.input_tokens is not None:
                 event_attrs["gen_ai.usage.input_tokens"] = int(resp.usage.billed_units.input_tokens)
-            if hasattr(resp.usage.billed_units, "output_tokens"):
+            if resp.usage.billed_units.output_tokens is not None:
                 event_attrs["gen_ai.usage.output_tokens"] = int(resp.usage.billed_units.output_tokens)
         reference_event_logger().emit(
             event_name="gen_ai.client.inference.operation.details",
@@ -126,10 +140,12 @@ def run_chat_tool_call(client):
         if hasattr(resp, "finish_reason") and resp.finish_reason:
             span.set_attribute("gen_ai.response.finish_reasons", [resp.finish_reason])
         if hasattr(resp, "usage") and resp.usage and hasattr(resp.usage, "billed_units") and resp.usage.billed_units:
-            if hasattr(resp.usage.billed_units, "input_tokens"):
+            if resp.usage.billed_units.input_tokens is not None:
                 span.set_attribute("gen_ai.usage.input_tokens", int(resp.usage.billed_units.input_tokens))
-            if hasattr(resp.usage.billed_units, "output_tokens"):
+                _input_tokens.record(int(resp.usage.billed_units.input_tokens), span_attributes_2)
+            if resp.usage.billed_units.output_tokens is not None:
                 span.set_attribute("gen_ai.usage.output_tokens", int(resp.usage.billed_units.output_tokens))
+                _output_tokens.record(int(resp.usage.billed_units.output_tokens), span_attributes_2)
         content = resp.message.content[0].text
         if hasattr(resp.message, "tool_calls") and resp.message.tool_calls:
             # The client returns the tool call; running it is app code the client
