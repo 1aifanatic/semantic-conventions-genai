@@ -196,8 +196,8 @@ The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 This span SHOULD be emitted if and only if the agent being invoked is not running
 in the same process as the instrumentation.
 
-For example, when instrumenting agent invocations against remote, managed,
-or other out-of-process agents such as OpenAI Assistants API, AWS Bedrock
+Examples include invocations of remote, managed, or other out-of-process
+agents such as OpenAI Assistants API, AWS Bedrock
 Agents, Gemini Enterprise Agent Platform, or Azure AI Foundry Agent Service.
 
 For agent invocations targeting local agents, refer to the
@@ -555,7 +555,7 @@ The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 This span SHOULD be emitted if and only if the agent runs locally within the
 calling process.
 
-For example, when instrumenting agent invocations in frameworks such as LangChain,
+Examples include local agent invocations in frameworks such as LangChain,
 CrewAI, AutoGen, or Google ADK.
 
 For agent invocations targeting an out-of-process or remote agent service,
