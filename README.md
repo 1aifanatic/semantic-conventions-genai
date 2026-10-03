@@ -12,7 +12,13 @@ on the core semantic conventions.
 
 ## Schema URL
 
-TODO
+Use the schema URL of the registry that defines the emitted signal. GenAI
+spans and metrics use the GenAI schema URL, including when they reference core
+attributes such as `server.address` or `error.type`. The current development
+schema URL and core dependency are declared in [the registry manifest](model/manifest.yaml).
+
+Language maintainers should see [Generating language artifacts](docs/code-generation.md)
+for packaging and versioning recommendations.
 
 ## Read the docs
 

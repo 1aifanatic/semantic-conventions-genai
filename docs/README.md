@@ -21,6 +21,8 @@ repository.
   client inference, agents, tool execution, evaluation, and MCP.
 * **[Registry](registry/README.md)**: auto-generated reference for attribute
   namespaces defined in this repository (`gen_ai.*`, `mcp.*`, `openai.*`).
+* **[Generating language artifacts](code-generation.md)**: packaging, versioning,
+  schema URLs, and migration from core-generated constants.
 
 Shared attributes, prose, and conventions not specific to GenAI continue to
 live in the upstream
