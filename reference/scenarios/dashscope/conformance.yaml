@@ -1,0 +1,13 @@
+runner: genai-conformance
+instrumented_library: dashscope
+instrumentation_library: reference
+
+server:
+  run: uv run --frozen --python 3.12 --project reference/scenarios/dashscope python reference/scenarios/dashscope/mock_server.py --port ${PORT}
+
+env:
+  MOCK_LLM_URL: ${MOCK_SERVER_URL}
+
+scenarios:
+  reference:
+    run: uv run --frozen --python 3.12 --project . python scenario.py

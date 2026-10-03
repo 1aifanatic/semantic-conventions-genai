@@ -6,8 +6,8 @@
 
 | Attribute | Supporting Libraries |
 | --- | --- |
-| gen_ai.operation.name | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
-| gen_ai.provider.name | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.operation.name | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.provider.name | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
 
 ## Conditionally Required
 
@@ -18,11 +18,11 @@
 | gen_ai.prompt.name | [aws-bedrock], [openai] |
 | gen_ai.prompt.version | [aws-bedrock], [openai] |
 | gen_ai.request.choice.count | [agent-framework], [openai] |
-| gen_ai.request.model | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.request.model | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
 | gen_ai.request.seed | [openai] |
 | gen_ai.request.stream | [openai] |
 | gen_ai.request.top_k | (none) |
-| server.port | [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [mistralai], [openai] |
+| server.port | [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [dashscope], [mistralai], [openai] |
 
 ## Recommended
 
@@ -37,8 +37,8 @@
 | gen_ai.request.stop_sequences | [openai] |
 | gen_ai.request.temperature | [openai] |
 | gen_ai.request.top_p | [openai] |
-| gen_ai.response.finish_reasons | [adk_a2a], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
-| gen_ai.response.id | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [groq], [litellm], [mistralai], [openai] |
+| gen_ai.response.finish_reasons | [adk_a2a], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.response.id | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [groq], [litellm], [mistralai], [openai] |
 | gen_ai.response.model | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [google-genai], [groq], [litellm], [mistralai], [openai] |
 | gen_ai.response.time_to_first_chunk | (none) |
 | gen_ai.usage.audio.cache_read.input_tokens | [google-genai], [vertexai] |
@@ -49,20 +49,20 @@
 | gen_ai.usage.image.cache_read.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.image.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.image.output_tokens | [google-genai] |
-| gen_ai.usage.input_tokens | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
-| gen_ai.usage.output_tokens | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.usage.input_tokens | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
+| gen_ai.usage.output_tokens | [adk_a2a], [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [dashscope], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
 | gen_ai.usage.reasoning.output_tokens | [adk_a2a], [agent-framework], [google-genai], [openai], [vertexai] |
 | gen_ai.usage.text.cache_read.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.text.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.text.output_tokens | [google-genai], [vertexai] |
-| server.address | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [mistralai], [openai] |
+| server.address | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [dashscope], [mistralai], [openai] |
 
 ## Opt-In
 
 | Attribute | Supporting Libraries |
 | --- | --- |
-| gen_ai.input.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [groq], [litellm], [mistralai], [openai] |
-| gen_ai.output.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [litellm], [mistralai], [openai] |
+| gen_ai.input.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [dashscope], [groq], [litellm], [mistralai], [openai] |
+| gen_ai.output.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [dashscope], [litellm], [mistralai], [openai] |
 | gen_ai.prompt.variable | (none) |
 | gen_ai.system_instructions | [agent-framework] |
 | gen_ai.tool.definitions | [aws-bedrock], [azure-ai-inference], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
@@ -75,6 +75,7 @@
 [azure-openai]: ../scenarios/azure-openai/scenario.py
 [claude-agent-sdk]: ../scenarios/claude-agent-sdk/scenario.py
 [cohere]: ../scenarios/cohere/scenario.py
+[dashscope]: ../scenarios/dashscope/scenario.py
 [google-genai]: ../scenarios/google-genai/scenario.py
 [groq]: ../scenarios/groq/scenario.py
 [litellm]: ../scenarios/litellm/scenario.py

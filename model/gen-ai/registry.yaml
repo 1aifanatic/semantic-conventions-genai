@@ -34,6 +34,10 @@ attributes:
           stability: development
           value: "cohere"
           brief: '[Cohere](https://cohere.com/)'
+        - id: alibaba.dashscope
+          stability: development
+          value: "alibaba.dashscope"
+          brief: '[Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio)'
         - id: azure.ai.inference
           stability: development
           value: "azure.ai.inference"

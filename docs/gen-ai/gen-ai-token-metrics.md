@@ -153,6 +153,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -280,6 +281,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -406,6 +408,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -532,6 +535,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -658,6 +662,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -786,6 +791,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |
@@ -904,6 +910,7 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `alibaba.dashscope` | [Alibaba Cloud Model Studio (DashScope)](https://www.alibabacloud.com/en/product/modelstudio) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `anthropic` | [Anthropic](https://www.anthropic.com/) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `aws.bedrock` | [AWS Bedrock](https://aws.amazon.com/bedrock) | ![Development](https://img.shields.io/badge/-development-blue) |
 | `azure.ai.inference` | Azure AI Inference | ![Development](https://img.shields.io/badge/-development-blue) |

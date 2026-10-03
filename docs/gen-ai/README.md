@@ -18,6 +18,7 @@ Semantic conventions for Generative AI operations are defined for the following 
 Technology specific semantic conventions are defined for the following GenAI system:
 
 * [Anthropic](./anthropic.md): Semantic Conventions for Anthropic.
+* [Alibaba Cloud Model Studio](./alibaba-dashscope.md): Semantic Conventions for DashScope text generation.
 * [Azure AI Inference](./azure-ai-inference.md): Semantic Conventions for Azure AI Inference.
 * [AWS Bedrock](./aws-bedrock.md): Semantic Conventions for AWS Bedrock.
 * [OpenAI](./openai.md): Semantic Conventions for OpenAI.

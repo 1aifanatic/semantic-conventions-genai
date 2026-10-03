@@ -1,0 +1,24 @@
+file_format: definition/2
+span_refinements:
+  - id: alibaba.dashscope.inference.client
+    ref: gen_ai.inference.client
+    brief: Alibaba Cloud Model Studio inference using the DashScope text-generation API.
+    note: |
+      `gen_ai.provider.name` MUST be set to `alibaba.dashscope` and SHOULD be provided at span creation time.
+      For the text-generation API with message input, `gen_ai.operation.name` SHOULD be `chat`.
+    stability: development
+    attributes:
+      - ref: gen_ai.request.model
+        note: The model passed to the DashScope generation request.
+      - ref: gen_ai.response.id
+        note: The `request_id` returned in the DashScope response.
+      - ref: gen_ai.response.finish_reasons
+        note: Record each `output.choices[].finish_reason` in the order returned by the API.
+      - ref: gen_ai.usage.input_tokens
+        note: The `usage.input_tokens` returned by the API.
+      - ref: gen_ai.usage.output_tokens
+        note: The `usage.output_tokens` returned by the API.
+      - ref: error.type
+        note: |
+          When DashScope returns an error response, use its `code` as `error.type`.
+          If no error code is available, use the exception type or HTTP status code.
