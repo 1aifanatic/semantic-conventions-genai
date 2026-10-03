@@ -46,64 +46,104 @@ and MUST follow the overall [guidelines for span names](https://github.com/open-
 
 **Attributes:**
 
-| Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
-| --- | --- | --- | --- | --- | --- |
-| [`gen_ai.operation.name`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The name of the operation being performed. [1] | `chat`; `generate_content`; `text_completion` |
-| [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/error.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Conditionally Required` If the operation ended in an error. | string | Describes a class of error the operation ended with. [2] | `timeout`; `java.net.UnknownHostException`; `server_certificate_invalid`; `500` |
-| [`gen_ai.conversation.id`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` [3] | string | The unique identifier for a conversation (session, thread), used to store and correlate messages within this conversation. [4] | `conv_5j66UpCpwteGg4YSxUnt7lPY` |
-| [`gen_ai.output.type`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` [5] | string | Represents the content type requested by the client. [6] | `text`; `json`; `image` |
-| [`gen_ai.prompt.name`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` when a named prompt template is used | string | The name of the prompt that uniquely identifies it. | `analyze-code` |
-| [`gen_ai.prompt.version`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` [7] | string | The version of the prompt template used. [8] | `1.0.0`; `2025-05-01`; `prod`; `v2` |
-| [`gen_ai.request.choice.count`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` If available, in the request, and !=1. | int | The target number of candidate completions to return. | `3` |
-| [`gen_ai.request.model`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` If available. | string | The name of the GenAI model a request is being made to. [9] | `gpt-4` |
-| [`gen_ai.request.seed`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` If applicable and if the request includes a seed. | int | Requests with same seed value more likely to return same result. | `100` |
-| [`gen_ai.request.stream`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` [10] | boolean | Indicates whether the GenAI request was made in streaming mode. | |
-| [`gen_ai.request.top_k`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Conditionally Required` If applicable. | int | The top-K sampling setting for the GenAI request: restricts token generation at each step to the K most likely next tokens. [11] | `40` |
-| [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Conditionally Required` If not default (443). | int | GenAI server port. [12] | `80`; `8080`; `443` |
-| [`azure.resource_provider.namespace`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/azure.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | [Azure Resource Provider Namespace](https://learn.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) as recognized by the client. [13] | `Microsoft.CognitiveServices` |
-| [`gen_ai.conversation.compacted`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` when available | boolean | Indicates whether the effective conversation context used for this operation is a compacted view of a prior conversation. [14] | `true` |
-| [`gen_ai.request.frequency_penalty`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | double | The frequency penalty setting for the GenAI request. | `0.1` |
-| [`gen_ai.request.max_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The maximum number of tokens the model generates for a request. | `100` |
-| [`gen_ai.request.presence_penalty`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | double | The presence penalty setting for the GenAI request. | `0.1` |
-| [`gen_ai.request.previous_response.id`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` [15] | string | The unique identifier of a previous response or interaction used to provide context for the current operation. [16] | `resp_0123456789aBCdef`; `interaction-123` |
-| [`gen_ai.request.reasoning.level`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | string | The reasoning or thinking effort level requested for a GenAI model. [17] | `low`; `medium`; `high` |
-| [`gen_ai.request.stop_sequences`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string[] | List of sequences that the model will use to stop generating further tokens. | `["forest", "lived"]` |
-| [`gen_ai.request.temperature`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | double | The temperature setting for the GenAI request. | `0.0` |
-| [`gen_ai.request.top_p`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | double | The top_p sampling setting for the GenAI request. | `1.0` |
-| [`gen_ai.response.finish_reasons`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string[] | Array of reasons the model stopped generating tokens, corresponding to each generation received. [18] | `["stop"]`; `["stop", "length"]`; `["stop", "length", "error"]` |
-| [`gen_ai.response.id`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The unique identifier for the completion. | `chatcmpl-123` |
-| [`gen_ai.response.model`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the model that generated the response. [19] | `gpt-4-0613` |
-| [`gen_ai.response.time_to_first_chunk`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` If the request was a streaming request. | double | Time to first chunk in a streaming response, measured from request issuance, in seconds. The value is measured from when the client issues the generation request to when the first chunk is received in the response stream. | `0.5`; `1.2` |
-| [`gen_ai.usage.audio.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of audio input tokens served from a provider-managed cache. [20] | `60` |
-| [`gen_ai.usage.audio.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of audio input tokens. [21] | `120` |
-| [`gen_ai.usage.audio.output_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of audio output tokens. [22] | `240` |
-| [`gen_ai.usage.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of input tokens served from a provider-managed cache. [23] | `50` |
-| [`gen_ai.usage.cache_write.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of input tokens written to a provider-managed cache. [24] | `25` |
-| [`gen_ai.usage.image.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of image input tokens served from a provider-managed cache. [25] | `128` |
-| [`gen_ai.usage.image.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of image input tokens. [26] | `258` |
-| [`gen_ai.usage.image.output_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of image output tokens. [27] | `1290` |
-| [`gen_ai.usage.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The number of prompt tokens as reported in the usage prompt_tokens property of the response. [28] | `100` |
-| [`gen_ai.usage.output_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The number of completion tokens as reported in the usage completion_tokens property of the response. [29] | `180` |
-| [`gen_ai.usage.reasoning.output_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of output tokens used for reasoning (e.g. chain-of-thought, extended thinking). [30] | `50` |
-| [`gen_ai.usage.text.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of text input tokens served from a provider-managed cache. [31] | `40` |
-| [`gen_ai.usage.text.input_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of text input tokens. [32] | `100` |
-| [`gen_ai.usage.text.output_tokens`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` When applicable. | int | The number of text output tokens. [33] | `180` |
-| [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Recommended` | string | GenAI server address. [34] | `example.com`; `10.1.2.80`; `/tmp/my.sock` |
-| [`gen_ai.input.messages`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | any | The chat history provided to the model as an input. [35] | [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"role": "user",<br>&nbsp;&nbsp;&nbsp;&nbsp;"parts": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"content": "Weather in Paris?"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"role": "assistant",<br>&nbsp;&nbsp;&nbsp;&nbsp;"parts": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "tool_call",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "call_VSPygqKTWdrhaFErNvMV18Yl",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "get_weather",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"arguments": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"location": "Paris"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"role": "tool",<br>&nbsp;&nbsp;&nbsp;&nbsp;"parts": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "tool_call_response",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "call_VSPygqKTWdrhaFErNvMV18Yl",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"response": "rainy, 57°F"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;}<br>] |
-| [`gen_ai.output.messages`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | any | Messages returned by the model where each message represents a specific model response (choice, candidate). [36] | [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"role": "assistant",<br>&nbsp;&nbsp;&nbsp;&nbsp;"parts": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"content": "The weather in Paris is currently rainy with a temperature of 57°F."<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;}<br>] |
-| [`gen_ai.prompt.variable`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The variables supplied to the prompt template, the `<key>` being the variable name, the value being the variable value. [37] | `Alice`; `French` |
-| [`gen_ai.system_instructions`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | any | The system message or instructions provided to the GenAI model separately from the chat history. [38] | [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",<br>&nbsp;&nbsp;&nbsp;&nbsp;"content": "You are an Agent that greet users, always use greetings tool to respond"<br>&nbsp;&nbsp;}<br>]; [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",<br>&nbsp;&nbsp;&nbsp;&nbsp;"content": "You are a language translator."<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",<br>&nbsp;&nbsp;&nbsp;&nbsp;"content": "Your mission is to translate text in English to French."<br>&nbsp;&nbsp;}<br>] |
-| [`gen_ai.tool.definitions`](/docs/registry/attributes/gen-ai.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | any | The list of tool definitions available to the GenAI agent or model. [39] | [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"type": "function",<br>&nbsp;&nbsp;&nbsp;&nbsp;"name": "get_current_weather",<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Get the current weather in a given location",<br>&nbsp;&nbsp;&nbsp;&nbsp;"parameters": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "object",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"properties": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"location": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "string",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "The city and state, e.g. San Francisco, CA"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"unit": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "string",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"enum": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"celsius",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"fahrenheit"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"required": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"location",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"unit"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;}<br>] |
 
-**[1] `gen_ai.operation.name`:** If one of the predefined values applies, but specific system uses a different name it's RECOMMENDED to document it in the semantic conventions for specific GenAI system and use system-specific name in the instrumentation. If a different name is not documented, instrumentation libraries SHOULD use applicable predefined value.
 
-**[2] `error.type`:** The `error.type` SHOULD match the error code returned by the Generative AI provider or the client library,
+<a id="azure-ai-inference-client-gen-ai-operation-name"></a>
+
+#### [`gen_ai.operation.name`](#azure-ai-inference-client-gen-ai-operation-name)
+
+The name of the operation being performed.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Required`
+
+**Value type:** string
+
+**Registry:** [`gen_ai.operation.name`](/docs/registry/attributes/gen-ai.md)
+
+If one of the predefined values applies, but specific system uses a different name it's RECOMMENDED to document it in the semantic conventions for specific GenAI system and use system-specific name in the instrumentation. If a different name is not documented, instrumentation libraries SHOULD use applicable predefined value.
+
+---
+
+`gen_ai.operation.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `chat` | Chat completion operation such as [OpenAI Chat API](https://platform.openai.com/docs/api-reference/chat) | ![Development](https://img.shields.io/badge/-development-blue) |
+| `create_agent` | Create GenAI agent | ![Development](https://img.shields.io/badge/-development-blue) |
+| `create_memory` | Create new memory records | ![Development](https://img.shields.io/badge/-development-blue) |
+| `create_memory_store` | Create or initialize a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
+| `delete_memory` | Delete memory records | ![Development](https://img.shields.io/badge/-development-blue) |
+| `delete_memory_store` | Delete or deprovision a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
+| `embeddings` | Embeddings operation such as [OpenAI Create embeddings API](https://platform.openai.com/docs/api-reference/embeddings/create) | ![Development](https://img.shields.io/badge/-development-blue) |
+| `execute_tool` | Execute a tool | ![Development](https://img.shields.io/badge/-development-blue) |
+| `fetch_response` | Fetch a previously generated model response by its identifier, without performing inference, such as [OpenAI Get a model response](https://platform.openai.com/docs/api-reference/responses/get) [1] | ![Development](https://img.shields.io/badge/-development-blue) |
+| `generate_content` | Multimodal content generation operation such as [Gemini Generate Content](https://ai.google.dev/api/generate-content) | ![Development](https://img.shields.io/badge/-development-blue) |
+| `invoke_agent` | Invoke GenAI agent | ![Development](https://img.shields.io/badge/-development-blue) |
+| `invoke_workflow` | Invoke GenAI workflow | ![Development](https://img.shields.io/badge/-development-blue) |
+| `plan` | Agent planning or task decomposition phase | ![Development](https://img.shields.io/badge/-development-blue) |
+| `retrieval` | Retrieval operation such as [OpenAI Search Vector Store API](https://platform.openai.com/docs/api-reference/vector-stores/search) | ![Development](https://img.shields.io/badge/-development-blue) |
+| `search_memory` | Search/query memories from a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
+| `text_completion` | Text completions operation such as [OpenAI Completions API (Legacy)](https://platform.openai.com/docs/api-reference/completions) | ![Development](https://img.shields.io/badge/-development-blue) |
+| `update_memory` | Update existing memory records | ![Development](https://img.shields.io/badge/-development-blue) |
+| `upsert_memory` | Create or update memory records without the caller choosing which | ![Development](https://img.shields.io/badge/-development-blue) |
+
+**[1]:** Instrumentations SHOULD NOT report token usage (as attributes or metrics) for this operation.
+
+
+<a id="azure-ai-inference-client-error-type"></a>
+
+#### [`error.type`](#azure-ai-inference-client-error-type)
+
+Describes a class of error the operation ended with.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If the operation ended in an error.
+
+**Value type:** string
+
+**Registry:** [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/error.md)
+
+The `error.type` SHOULD match the error code returned by the Generative AI provider or the client library,
 the canonical name of exception that occurred, or another low-cardinality error identifier.
 Instrumentations SHOULD document the list of errors they report.
 
-**[3] `gen_ai.conversation.id`:** If and only if the instrumented library has one readily available, or the user application provides one through OpenTelemetry context or library-specific mechanisms.
+**Examples:**
 
-**[4] `gen_ai.conversation.id`:** Instrumentations SHOULD populate conversation id when they have an identifier
+`timeout`
+
+`java.net.UnknownHostException`
+
+`server_certificate_invalid`
+
+`500`
+
+---
+
+`error.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `_OTHER` | A fallback error value to be used when the instrumentation doesn't define a custom value. | ![Stable](https://img.shields.io/badge/-stable-lightgreen) |
+
+
+<a id="azure-ai-inference-client-gen-ai-conversation-id"></a>
+
+#### [`gen_ai.conversation.id`](#azure-ai-inference-client-gen-ai-conversation-id)
+
+The unique identifier for a conversation (session, thread), used to store and correlate messages within this conversation.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If and only if the instrumented library has one readily available, or the user application provides one through OpenTelemetry context or library-specific mechanisms.
+
+**Value type:** string
+
+**Registry:** [`gen_ai.conversation.id`](/docs/registry/attributes/gen-ai.md)
+
+Instrumentations SHOULD populate conversation id when they have an identifier
 for the conversation readily available for a given operation, for example:
 
 - when the client framework being instrumented manages conversation history
@@ -122,9 +162,25 @@ Application developers that manage conversation history MAY add conversation id 
 spans or logs using custom span or log record processors or hooks provided by instrumentation
 libraries.
 
-**[5] `gen_ai.output.type`:** When applicable and if the request includes an output format.
+**Examples:**
 
-**[6] `gen_ai.output.type`:** This attribute SHOULD be set to the output type requested by the client:
+`conv_5j66UpCpwteGg4YSxUnt7lPY`
+
+<a id="azure-ai-inference-client-gen-ai-output-type"></a>
+
+#### [`gen_ai.output.type`](#azure-ai-inference-client-gen-ai-output-type)
+
+Represents the content type requested by the client.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` When applicable and if the request includes an output format.
+
+**Value type:** string
+
+**Registry:** [`gen_ai.output.type`](/docs/registry/attributes/gen-ai.md)
+
+This attribute SHOULD be set to the output type requested by the client:
 
 - `json` for structured outputs with defined or undefined schema
 - `image` for image output
@@ -138,38 +194,402 @@ URL pointing to an image file.
 Additional output format details may be recorded in the future in the
 `gen_ai.output.{type}.*` attributes.
 
-**[7] `gen_ai.prompt.version`:** when `gen_ai.prompt.name` is set and a version is available
+---
 
-**[8] `gen_ai.prompt.version`:** The version string can follow any versioning scheme chosen by the
+`gen_ai.output.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `image` | Image | ![Development](https://img.shields.io/badge/-development-blue) |
+| `json` | JSON object with known or unknown schema | ![Development](https://img.shields.io/badge/-development-blue) |
+| `speech` | Speech | ![Development](https://img.shields.io/badge/-development-blue) |
+| `text` | Plain text | ![Development](https://img.shields.io/badge/-development-blue) |
+
+
+<a id="azure-ai-inference-client-gen-ai-prompt-name"></a>
+
+#### [`gen_ai.prompt.name`](#azure-ai-inference-client-gen-ai-prompt-name)
+
+The name of the prompt that uniquely identifies it.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` when a named prompt template is used
+
+**Value type:** string
+
+**Registry:** [`gen_ai.prompt.name`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`analyze-code`
+
+<a id="azure-ai-inference-client-gen-ai-prompt-version"></a>
+
+#### [`gen_ai.prompt.version`](#azure-ai-inference-client-gen-ai-prompt-version)
+
+The version of the prompt template used.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` when `gen_ai.prompt.name` is set and a version is available
+
+**Value type:** string
+
+**Registry:** [`gen_ai.prompt.version`](/docs/registry/attributes/gen-ai.md)
+
+The version string can follow any versioning scheme chosen by the
 application (e.g., SemVer, date-based, or platform-specific tags).
 When a prompt management system is in use, this SHOULD match the
 version identifier used by that system.
 
-**[9] `gen_ai.request.model`:** The name of the GenAI model a request is being made to. If the model is supplied by a vendor, then the value must be the exact name of the model requested. If the model is a fine-tuned custom model, the value should have a more specific name than the base model that's been fine-tuned.
+**Examples:**
 
-**[10] `gen_ai.request.stream`:** If and only if the request is streaming. If unset, the request is assumed to be non-streaming.
+`1.0.0`
 
-**[11] `gen_ai.request.top_k`:** This is a decoding/sampling parameter (e.g., Anthropic `top_k`, Cohere `k`, Google `topK`), not an output-shaping parameter. In particular, OpenAI's `top_logprobs` controls how many per-token log-probabilities are returned in the response and does not change generation; it MUST NOT be reported as `gen_ai.request.top_k`.
+`2025-05-01`
 
-**[12] `server.port`:** When observed from the client side, and when communicating through an intermediary, `server.port` SHOULD represent the server port behind any intermediaries, for example proxies, if it's available.
+`prod`
 
-**[13] `azure.resource_provider.namespace`:** When `azure.resource_provider.namespace` attribute is populated, it MUST be set to `Microsoft.CognitiveServices` for all operations performed by Azure AI Inference clients.
+`v2`
 
-**[14] `gen_ai.conversation.compacted`:** This attribute is a positive indicator of context compaction. Instrumentations
+<a id="azure-ai-inference-client-gen-ai-request-choice-count"></a>
+
+#### [`gen_ai.request.choice.count`](#azure-ai-inference-client-gen-ai-request-choice-count)
+
+The target number of candidate completions to return.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If available, in the request, and !=1.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.request.choice.count`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`3`
+
+<a id="azure-ai-inference-client-gen-ai-request-model"></a>
+
+#### [`gen_ai.request.model`](#azure-ai-inference-client-gen-ai-request-model)
+
+The name of the GenAI model a request is being made to.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If available.
+
+**Value type:** string
+
+**Registry:** [`gen_ai.request.model`](/docs/registry/attributes/gen-ai.md)
+
+The name of the GenAI model a request is being made to. If the model is supplied by a vendor, then the value must be the exact name of the model requested. If the model is a fine-tuned custom model, the value should have a more specific name than the base model that's been fine-tuned.
+
+**Examples:**
+
+`g`
+
+`p`
+
+`t`
+
+`-`
+
+`4`
+
+<a id="azure-ai-inference-client-gen-ai-request-seed"></a>
+
+#### [`gen_ai.request.seed`](#azure-ai-inference-client-gen-ai-request-seed)
+
+Requests with same seed value more likely to return same result.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If applicable and if the request includes a seed.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.request.seed`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`100`
+
+<a id="azure-ai-inference-client-gen-ai-request-stream"></a>
+
+#### [`gen_ai.request.stream`](#azure-ai-inference-client-gen-ai-request-stream)
+
+Indicates whether the GenAI request was made in streaming mode.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If and only if the request is streaming. If unset, the request is assumed to be non-streaming.
+
+**Value type:** boolean
+
+**Registry:** [`gen_ai.request.stream`](/docs/registry/attributes/gen-ai.md)
+
+<a id="azure-ai-inference-client-gen-ai-request-top-k"></a>
+
+#### [`gen_ai.request.top_k`](#azure-ai-inference-client-gen-ai-request-top-k)
+
+The top-K sampling setting for the GenAI request: restricts token generation at each step to the K most likely next tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.request.top_k`](/docs/registry/attributes/gen-ai.md)
+
+This is a decoding/sampling parameter (e.g., Anthropic `top_k`, Cohere `k`, Google `topK`), not an output-shaping parameter. In particular, OpenAI's `top_logprobs` controls how many per-token log-probabilities are returned in the response and does not change generation; it MUST NOT be reported as `gen_ai.request.top_k`.
+
+**Examples:**
+
+`40`
+
+<a id="azure-ai-inference-client-server-port"></a>
+
+#### [`server.port`](#azure-ai-inference-client-server-port)
+
+GenAI server port.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If not default (443).
+
+**Value type:** int
+
+**Registry:** [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md)
+
+When observed from the client side, and when communicating through an intermediary, `server.port` SHOULD represent the server port behind any intermediaries, for example proxies, if it's available.
+
+**Examples:**
+
+`80`
+
+`8080`
+
+`443`
+
+<a id="azure-ai-inference-client-azure-resource-provider-namespace"></a>
+
+#### [`azure.resource_provider.namespace`](#azure-ai-inference-client-azure-resource-provider-namespace)
+
+[Azure Resource Provider Namespace](https://learn.microsoft.com/azure/azure-resource-manager/management/azure-services-resource-providers) as recognized by the client.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string
+
+**Registry:** [`azure.resource_provider.namespace`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/azure.md)
+
+When `azure.resource_provider.namespace` attribute is populated, it MUST be set to `Microsoft.CognitiveServices` for all operations performed by Azure AI Inference clients.
+
+**Examples:**
+
+`Microsoft.CognitiveServices`
+
+<a id="azure-ai-inference-client-gen-ai-conversation-compacted"></a>
+
+#### [`gen_ai.conversation.compacted`](#azure-ai-inference-client-gen-ai-conversation-compacted)
+
+Indicates whether the effective conversation context used for this operation is a compacted view of a prior conversation.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` when available
+
+**Value type:** boolean
+
+**Registry:** [`gen_ai.conversation.compacted`](/docs/registry/attributes/gen-ai.md)
+
+This attribute is a positive indicator of context compaction. Instrumentations
 SHOULD set it to `true` only when they can reliably determine that context
 compaction was applied. Instrumentations SHOULD NOT set it to `false`; they
 SHOULD leave it unset otherwise.
 
-**[15] `gen_ai.request.previous_response.id`:** When available and if the request references a previous response.
+**Examples:**
 
-**[16] `gen_ai.request.previous_response.id`:** Instrumentations SHOULD populate this attribute when the request references a previous response or interaction identifier to continue a conversation or pass prior context.
+`true`
+
+<a id="azure-ai-inference-client-gen-ai-request-frequency-penalty"></a>
+
+#### [`gen_ai.request.frequency_penalty`](#azure-ai-inference-client-gen-ai-request-frequency-penalty)
+
+The frequency penalty setting for the GenAI request.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** double
+
+**Registry:** [`gen_ai.request.frequency_penalty`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`0.1`
+
+<a id="azure-ai-inference-client-gen-ai-request-max-tokens"></a>
+
+#### [`gen_ai.request.max_tokens`](#azure-ai-inference-client-gen-ai-request-max-tokens)
+
+The maximum number of tokens the model generates for a request.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** int
+
+**Registry:** [`gen_ai.request.max_tokens`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`100`
+
+<a id="azure-ai-inference-client-gen-ai-request-presence-penalty"></a>
+
+#### [`gen_ai.request.presence_penalty`](#azure-ai-inference-client-gen-ai-request-presence-penalty)
+
+The presence penalty setting for the GenAI request.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** double
+
+**Registry:** [`gen_ai.request.presence_penalty`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`0.1`
+
+<a id="azure-ai-inference-client-gen-ai-request-previous-response-id"></a>
+
+#### [`gen_ai.request.previous_response.id`](#azure-ai-inference-client-gen-ai-request-previous-response-id)
+
+The unique identifier of a previous response or interaction used to provide context for the current operation.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When available and if the request references a previous response.
+
+**Value type:** string
+
+**Registry:** [`gen_ai.request.previous_response.id`](/docs/registry/attributes/gen-ai.md)
+
+Instrumentations SHOULD populate this attribute when the request references a previous response or interaction identifier to continue a conversation or pass prior context.
 For example, `previous_response_id` in [OpenAI Responses API](https://developers.openai.com/api/docs/guides/conversation-state#passing-context-from-the-previous-response)
 or `previous_interaction_id` in [Google GenAI Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview).
 
-**[17] `gen_ai.request.reasoning.level`:** The value SHOULD be the exact string value sent to the provider.
+**Examples:**
+
+`resp_0123456789aBCdef`
+
+`interaction-123`
+
+<a id="azure-ai-inference-client-gen-ai-request-reasoning-level"></a>
+
+#### [`gen_ai.request.reasoning.level`](#azure-ai-inference-client-gen-ai-request-reasoning-level)
+
+The reasoning or thinking effort level requested for a GenAI model.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** string
+
+**Registry:** [`gen_ai.request.reasoning.level`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be the exact string value sent to the provider.
 Semantic conventions for individual providers SHOULD document which input parameter maps to this attribute.
 
-**[18] `gen_ai.response.finish_reasons`:** Values correspond to generations in the same order as the returned
+**Examples:**
+
+`low`
+
+`medium`
+
+`high`
+
+<a id="azure-ai-inference-client-gen-ai-request-stop-sequences"></a>
+
+#### [`gen_ai.request.stop_sequences`](#azure-ai-inference-client-gen-ai-request-stop-sequences)
+
+List of sequences that the model will use to stop generating further tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string[]
+
+**Registry:** [`gen_ai.request.stop_sequences`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`["forest", "lived"]`
+
+<a id="azure-ai-inference-client-gen-ai-request-temperature"></a>
+
+#### [`gen_ai.request.temperature`](#azure-ai-inference-client-gen-ai-request-temperature)
+
+The temperature setting for the GenAI request.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** double
+
+**Registry:** [`gen_ai.request.temperature`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`0.0`
+
+<a id="azure-ai-inference-client-gen-ai-request-top-p"></a>
+
+#### [`gen_ai.request.top_p`](#azure-ai-inference-client-gen-ai-request-top-p)
+
+The top_p sampling setting for the GenAI request.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** double
+
+**Registry:** [`gen_ai.request.top_p`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`1.0`
+
+<a id="azure-ai-inference-client-gen-ai-response-finish-reasons"></a>
+
+#### [`gen_ai.response.finish_reasons`](#azure-ai-inference-client-gen-ai-response-finish-reasons)
+
+Array of reasons the model stopped generating tokens, corresponding to each generation received.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string[]
+
+**Registry:** [`gen_ai.response.finish_reasons`](/docs/registry/attributes/gen-ai.md)
+
+Values correspond to generations in the same order as the returned
 choices/candidates.
 
 Each position SHOULD contain the finish reason for the corresponding
@@ -181,25 +601,247 @@ instead of omitting it.
 `error` indicates that the generation ended abnormally, whether reported
 by the provider or inferred by the instrumentation.
 
-**[19] `gen_ai.response.model`:** If available. The name of the GenAI model that provided the response. If the model is supplied by a vendor, then the value must be the exact name of the model actually used. If the model is a fine-tuned custom model, the value should have a more specific name than the base model that's been fine-tuned.
+**Examples:**
 
-**[20] `gen_ai.usage.audio.cache_read.input_tokens`:** The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.audio.input_tokens`.
+`["stop"]`
 
-**[21] `gen_ai.usage.audio.input_tokens`:** The value SHOULD be included in `gen_ai.usage.input_tokens`.
+`["stop", "length"]`
 
-**[22] `gen_ai.usage.audio.output_tokens`:** The value SHOULD be included in `gen_ai.usage.output_tokens`.
+`["stop", "length", "error"]`
 
-**[23] `gen_ai.usage.cache_read.input_tokens`:** The value SHOULD be included in `gen_ai.usage.input_tokens`.
+<a id="azure-ai-inference-client-gen-ai-response-id"></a>
 
-**[24] `gen_ai.usage.cache_write.input_tokens`:** The value SHOULD be included in `gen_ai.usage.input_tokens`.
+#### [`gen_ai.response.id`](#azure-ai-inference-client-gen-ai-response-id)
 
-**[25] `gen_ai.usage.image.cache_read.input_tokens`:** The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.image.input_tokens`.
+The unique identifier for the completion.
 
-**[26] `gen_ai.usage.image.input_tokens`:** The value SHOULD be included in `gen_ai.usage.input_tokens`.
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
 
-**[27] `gen_ai.usage.image.output_tokens`:** The value SHOULD be included in `gen_ai.usage.output_tokens`.
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
 
-**[28] `gen_ai.usage.input_tokens`:** This value SHOULD include all types of input tokens, including cached tokens.
+**Value type:** string
+
+**Registry:** [`gen_ai.response.id`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`chatcmpl-123`
+
+<a id="azure-ai-inference-client-gen-ai-response-model"></a>
+
+#### [`gen_ai.response.model`](#azure-ai-inference-client-gen-ai-response-model)
+
+The name of the model that generated the response.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string
+
+**Registry:** [`gen_ai.response.model`](/docs/registry/attributes/gen-ai.md)
+
+If available. The name of the GenAI model that provided the response. If the model is supplied by a vendor, then the value must be the exact name of the model actually used. If the model is a fine-tuned custom model, the value should have a more specific name than the base model that's been fine-tuned.
+
+**Examples:**
+
+`gpt-4-0613`
+
+<a id="azure-ai-inference-client-gen-ai-response-time-to-first-chunk"></a>
+
+#### [`gen_ai.response.time_to_first_chunk`](#azure-ai-inference-client-gen-ai-response-time-to-first-chunk)
+
+Time to first chunk in a streaming response, measured from request issuance, in seconds. The value is measured from when the client issues the generation request to when the first chunk is received in the response stream.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` If the request was a streaming request.
+
+**Value type:** double
+
+**Registry:** [`gen_ai.response.time_to_first_chunk`](/docs/registry/attributes/gen-ai.md)
+
+**Examples:**
+
+`0.5`
+
+`1.2`
+
+<a id="azure-ai-inference-client-gen-ai-usage-audio-cache-read-input-tokens"></a>
+
+#### [`gen_ai.usage.audio.cache_read.input_tokens`](#azure-ai-inference-client-gen-ai-usage-audio-cache-read-input-tokens)
+
+The number of audio input tokens served from a provider-managed cache.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.audio.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.audio.input_tokens`.
+
+**Examples:**
+
+`60`
+
+<a id="azure-ai-inference-client-gen-ai-usage-audio-input-tokens"></a>
+
+#### [`gen_ai.usage.audio.input_tokens`](#azure-ai-inference-client-gen-ai-usage-audio-input-tokens)
+
+The number of audio input tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.audio.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.input_tokens`.
+
+**Examples:**
+
+`120`
+
+<a id="azure-ai-inference-client-gen-ai-usage-audio-output-tokens"></a>
+
+#### [`gen_ai.usage.audio.output_tokens`](#azure-ai-inference-client-gen-ai-usage-audio-output-tokens)
+
+The number of audio output tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.audio.output_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.output_tokens`.
+
+**Examples:**
+
+`240`
+
+<a id="azure-ai-inference-client-gen-ai-usage-cache-read-input-tokens"></a>
+
+#### [`gen_ai.usage.cache_read.input_tokens`](#azure-ai-inference-client-gen-ai-usage-cache-read-input-tokens)
+
+The number of input tokens served from a provider-managed cache.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.input_tokens`.
+
+**Examples:**
+
+`50`
+
+<a id="azure-ai-inference-client-gen-ai-usage-cache-write-input-tokens"></a>
+
+#### [`gen_ai.usage.cache_write.input_tokens`](#azure-ai-inference-client-gen-ai-usage-cache-write-input-tokens)
+
+The number of input tokens written to a provider-managed cache.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.cache_write.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.input_tokens`.
+
+**Examples:**
+
+`25`
+
+<a id="azure-ai-inference-client-gen-ai-usage-image-cache-read-input-tokens"></a>
+
+#### [`gen_ai.usage.image.cache_read.input_tokens`](#azure-ai-inference-client-gen-ai-usage-image-cache-read-input-tokens)
+
+The number of image input tokens served from a provider-managed cache.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.image.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.image.input_tokens`.
+
+**Examples:**
+
+`128`
+
+<a id="azure-ai-inference-client-gen-ai-usage-image-input-tokens"></a>
+
+#### [`gen_ai.usage.image.input_tokens`](#azure-ai-inference-client-gen-ai-usage-image-input-tokens)
+
+The number of image input tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.image.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.input_tokens`.
+
+**Examples:**
+
+`258`
+
+<a id="azure-ai-inference-client-gen-ai-usage-image-output-tokens"></a>
+
+#### [`gen_ai.usage.image.output_tokens`](#azure-ai-inference-client-gen-ai-usage-image-output-tokens)
+
+The number of image output tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.image.output_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.output_tokens`.
+
+**Examples:**
+
+`1290`
+
+<a id="azure-ai-inference-client-gen-ai-usage-input-tokens"></a>
+
+#### [`gen_ai.usage.input_tokens`](#azure-ai-inference-client-gen-ai-usage-input-tokens)
+
+The number of prompt tokens as reported in the usage prompt_tokens property of the response.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+This value SHOULD include all types of input tokens, including cached tokens.
 Instrumentations SHOULD make a best effort to populate this value, using a total
 provided by the provider when available or, depending on the provider API,
 by summing different token types parsed from the provider output.
@@ -217,22 +859,152 @@ if a request has 100 text tokens (40 cached) and 200 image tokens:
 - `gen_ai.usage.text.cache_read.input_tokens`: 40
 - `gen_ai.usage.image.input_tokens`: 200
 
-**[29] `gen_ai.usage.output_tokens`:** When the provider reports both billed token counts and model-consumed
+**Examples:**
+
+`100`
+
+<a id="azure-ai-inference-client-gen-ai-usage-output-tokens"></a>
+
+#### [`gen_ai.usage.output_tokens`](#azure-ai-inference-client-gen-ai-usage-output-tokens)
+
+The number of completion tokens as reported in the usage completion_tokens property of the response.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.output_tokens`](/docs/registry/attributes/gen-ai.md)
+
+When the provider reports both billed token counts and model-consumed
 token counts (for example, Cohere exposes both `usage.billed_units` and
 `usage.tokens`), instrumentations SHOULD report the billed count so the
 value matches the units the customer is charged for.
 
-**[30] `gen_ai.usage.reasoning.output_tokens`:** The value SHOULD be included in `gen_ai.usage.output_tokens`.
+**Examples:**
 
-**[31] `gen_ai.usage.text.cache_read.input_tokens`:** The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.text.input_tokens`.
+`180`
 
-**[32] `gen_ai.usage.text.input_tokens`:** The value SHOULD be included in `gen_ai.usage.input_tokens`.
+<a id="azure-ai-inference-client-gen-ai-usage-reasoning-output-tokens"></a>
 
-**[33] `gen_ai.usage.text.output_tokens`:** The value SHOULD be included in `gen_ai.usage.output_tokens`.
+#### [`gen_ai.usage.reasoning.output_tokens`](#azure-ai-inference-client-gen-ai-usage-reasoning-output-tokens)
 
-**[34] `server.address`:** When observed from the client side, and when communicating through an intermediary, `server.address` SHOULD represent the server address behind any intermediaries, for example proxies, if it's available.
+The number of output tokens used for reasoning (e.g. chain-of-thought, extended thinking).
 
-**[35] `gen_ai.input.messages`:** Messages MUST be provided in the order they were sent to the model.
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.reasoning.output_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.output_tokens`.
+
+**Examples:**
+
+`50`
+
+<a id="azure-ai-inference-client-gen-ai-usage-text-cache-read-input-tokens"></a>
+
+#### [`gen_ai.usage.text.cache_read.input_tokens`](#azure-ai-inference-client-gen-ai-usage-text-cache-read-input-tokens)
+
+The number of text input tokens served from a provider-managed cache.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.text.cache_read.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.cache_read.input_tokens` and in `gen_ai.usage.text.input_tokens`.
+
+**Examples:**
+
+`40`
+
+<a id="azure-ai-inference-client-gen-ai-usage-text-input-tokens"></a>
+
+#### [`gen_ai.usage.text.input_tokens`](#azure-ai-inference-client-gen-ai-usage-text-input-tokens)
+
+The number of text input tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.text.input_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.input_tokens`.
+
+**Examples:**
+
+`100`
+
+<a id="azure-ai-inference-client-gen-ai-usage-text-output-tokens"></a>
+
+#### [`gen_ai.usage.text.output_tokens`](#azure-ai-inference-client-gen-ai-usage-text-output-tokens)
+
+The number of text output tokens.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended` When applicable.
+
+**Value type:** int
+
+**Registry:** [`gen_ai.usage.text.output_tokens`](/docs/registry/attributes/gen-ai.md)
+
+The value SHOULD be included in `gen_ai.usage.output_tokens`.
+
+**Examples:**
+
+`180`
+
+<a id="azure-ai-inference-client-server-address"></a>
+
+#### [`server.address`](#azure-ai-inference-client-server-address)
+
+GenAI server address.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string
+
+**Registry:** [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md)
+
+When observed from the client side, and when communicating through an intermediary, `server.address` SHOULD represent the server address behind any intermediaries, for example proxies, if it's available.
+
+**Examples:**
+
+`example.com`
+
+`10.1.2.80`
+
+`/tmp/my.sock`
+
+<a id="azure-ai-inference-client-gen-ai-input-messages"></a>
+
+#### [`gen_ai.input.messages`](#azure-ai-inference-client-gen-ai-input-messages)
+
+The chat history provided to the model as an input.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Opt-In`
+
+**Value type:** any
+
+**Registry:** [`gen_ai.input.messages`](/docs/registry/attributes/gen-ai.md)
+
+Messages MUST be provided in the order they were sent to the model.
 Instrumentations MAY provide a way for users to filter or truncate
 input messages.
 
@@ -246,7 +1018,60 @@ Instrumentations MUST follow [JSON schema](/model/gen-ai/gen-ai-input-messages.j
 
 When the attribute is recorded on events, it MUST be recorded in structured form. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.
 
-**[36] `gen_ai.output.messages`:** Each message represents a single output choice/candidate generated by
+**Examples:**
+
+```
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "type": "text",
+        "content": "Weather in Paris?"
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "parts": [
+      {
+        "type": "tool_call",
+        "id": "call_VSPygqKTWdrhaFErNvMV18Yl",
+        "name": "get_weather",
+        "arguments": {
+          "location": "Paris"
+        }
+      }
+    ]
+  },
+  {
+    "role": "tool",
+    "parts": [
+      {
+        "type": "tool_call_response",
+        "id": "call_VSPygqKTWdrhaFErNvMV18Yl",
+        "response": "rainy, 57°F"
+      }
+    ]
+  }
+]
+```
+
+<a id="azure-ai-inference-client-gen-ai-output-messages"></a>
+
+#### [`gen_ai.output.messages`](#azure-ai-inference-client-gen-ai-output-messages)
+
+Messages returned by the model where each message represents a specific model response (choice, candidate).
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Opt-In`
+
+**Value type:** any
+
+**Registry:** [`gen_ai.output.messages`](/docs/registry/attributes/gen-ai.md)
+
+Each message represents a single output choice/candidate generated by
 the model. Each message corresponds to exactly one generation
 (choice/candidate) and vice versa - one choice cannot be split across
 multiple messages or one message cannot contain parts from multiple choices.
@@ -266,7 +1091,37 @@ Instrumentations MUST follow [JSON schema](/model/gen-ai/gen-ai-output-messages.
 
 When the attribute is recorded on events, it MUST be recorded in structured form. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.
 
-**[37] `gen_ai.prompt.variable`:** Prompt templates are parameterized with variables that are filled in
+**Examples:**
+
+```
+[
+  {
+    "role": "assistant",
+    "parts": [
+      {
+        "type": "text",
+        "content": "The weather in Paris is currently rainy with a temperature of 57°F."
+      }
+    ]
+  }
+]
+```
+
+<a id="azure-ai-inference-client-gen-ai-prompt-variable"></a>
+
+#### [`gen_ai.prompt.variable`](#azure-ai-inference-client-gen-ai-prompt-variable)
+
+The variables supplied to the prompt template, the `<key>` being the variable name, the value being the variable value.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Opt-In`
+
+**Value type:** string
+
+**Registry:** [`gen_ai.prompt.variable`](/docs/registry/attributes/gen-ai.md)
+
+Prompt templates are parameterized with variables that are filled in
 at runtime. This attribute records the variable values passed to the
 template. The attribute name defines the variable name, and the
 attribute value is the variable value serialized as a string.
@@ -281,7 +1136,27 @@ Examples:
 > [!Warning]
 > This attribute may contain sensitive information.
 
-**[38] `gen_ai.system_instructions`:** This attribute SHOULD be used when the corresponding provider or API
+**Examples:**
+
+`Alice`
+
+`French`
+
+<a id="azure-ai-inference-client-gen-ai-system-instructions"></a>
+
+#### [`gen_ai.system_instructions`](#azure-ai-inference-client-gen-ai-system-instructions)
+
+The system message or instructions provided to the GenAI model separately from the chat history.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Opt-In`
+
+**Value type:** any
+
+**Registry:** [`gen_ai.system_instructions`](/docs/registry/attributes/gen-ai.md)
+
+This attribute SHOULD be used when the corresponding provider or API
 allows to provide system instructions or messages separately from the
 chat history.
 
@@ -301,7 +1176,43 @@ Instrumentations MUST follow [JSON schema](/model/gen-ai/gen-ai-system-instructi
 
 When the attribute is recorded on events, it MUST be recorded in structured form. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.
 
-**[39] `gen_ai.tool.definitions`:**
+**Examples:**
+
+```
+[
+  {
+    "type": "text",
+    "content": "You are an Agent that greet users, always use greetings tool to respond"
+  }
+]
+```
+
+```
+[
+  {
+    "type": "text",
+    "content": "You are a language translator."
+  },
+  {
+    "type": "text",
+    "content": "Your mission is to translate text in English to French."
+  }
+]
+```
+
+<a id="azure-ai-inference-client-gen-ai-tool-definitions"></a>
+
+#### [`gen_ai.tool.definitions`](#azure-ai-inference-client-gen-ai-tool-definitions)
+
+The list of tool definitions available to the GenAI agent or model.
+
+**Stability:** ![Development](https://img.shields.io/badge/-development-blue)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Opt-In`
+
+**Value type:** any
+
+**Registry:** [`gen_ai.tool.definitions`](/docs/registry/attributes/gen-ai.md)
 
 > [!WARNING]
 > This attribute may contain sensitive information.
@@ -314,6 +1225,38 @@ Instrumentations MUST follow [JSON schema](/model/gen-ai/gen-ai-tool-definitions
 
 When the attribute is recorded on events, it MUST be recorded in structured form. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.
 
+**Examples:**
+
+```
+[
+  {
+    "type": "function",
+    "name": "get_current_weather",
+    "description": "Get the current weather in a given location",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "The city and state, e.g. San Francisco, CA"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "celsius",
+            "fahrenheit"
+          ]
+        }
+      },
+      "required": [
+        "location",
+        "unit"
+      ]
+    }
+  }
+]
+```
+
 The following attributes can be important for making sampling decisions
 and SHOULD be provided **at span creation time** (if provided at all):
 
@@ -321,52 +1264,6 @@ and SHOULD be provided **at span creation time** (if provided at all):
 * [`gen_ai.request.model`](/docs/registry/attributes/gen-ai.md)
 * [`server.address`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md)
 * [`server.port`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/server.md)
-
----
-
-`error.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
-
-| Value | Description | Stability |
-| --- | --- | --- |
-| `_OTHER` | A fallback error value to be used when the instrumentation doesn't define a custom value. | ![Stable](https://img.shields.io/badge/-stable-lightgreen) |
-
----
-
-`gen_ai.operation.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
-
-| Value | Description | Stability |
-| --- | --- | --- |
-| `chat` | Chat completion operation such as [OpenAI Chat API](https://platform.openai.com/docs/api-reference/chat) | ![Development](https://img.shields.io/badge/-development-blue) |
-| `create_agent` | Create GenAI agent | ![Development](https://img.shields.io/badge/-development-blue) |
-| `create_memory` | Create new memory records | ![Development](https://img.shields.io/badge/-development-blue) |
-| `create_memory_store` | Create or initialize a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
-| `delete_memory` | Delete memory records | ![Development](https://img.shields.io/badge/-development-blue) |
-| `delete_memory_store` | Delete or deprovision a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
-| `embeddings` | Embeddings operation such as [OpenAI Create embeddings API](https://platform.openai.com/docs/api-reference/embeddings/create) | ![Development](https://img.shields.io/badge/-development-blue) |
-| `execute_tool` | Execute a tool | ![Development](https://img.shields.io/badge/-development-blue) |
-| `fetch_response` | Fetch a previously generated model response by its identifier, without performing inference, such as [OpenAI Get a model response](https://platform.openai.com/docs/api-reference/responses/get) [40] | ![Development](https://img.shields.io/badge/-development-blue) |
-| `generate_content` | Multimodal content generation operation such as [Gemini Generate Content](https://ai.google.dev/api/generate-content) | ![Development](https://img.shields.io/badge/-development-blue) |
-| `invoke_agent` | Invoke GenAI agent | ![Development](https://img.shields.io/badge/-development-blue) |
-| `invoke_workflow` | Invoke GenAI workflow | ![Development](https://img.shields.io/badge/-development-blue) |
-| `plan` | Agent planning or task decomposition phase | ![Development](https://img.shields.io/badge/-development-blue) |
-| `retrieval` | Retrieval operation such as [OpenAI Search Vector Store API](https://platform.openai.com/docs/api-reference/vector-stores/search) | ![Development](https://img.shields.io/badge/-development-blue) |
-| `search_memory` | Search/query memories from a memory store | ![Development](https://img.shields.io/badge/-development-blue) |
-| `text_completion` | Text completions operation such as [OpenAI Completions API (Legacy)](https://platform.openai.com/docs/api-reference/completions) | ![Development](https://img.shields.io/badge/-development-blue) |
-| `update_memory` | Update existing memory records | ![Development](https://img.shields.io/badge/-development-blue) |
-| `upsert_memory` | Create or update memory records without the caller choosing which | ![Development](https://img.shields.io/badge/-development-blue) |
-
-**[40]:** Instrumentations SHOULD NOT report token usage (as attributes or metrics) for this operation.
-
----
-
-`gen_ai.output.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
-
-| Value | Description | Stability |
-| --- | --- | --- |
-| `image` | Image | ![Development](https://img.shields.io/badge/-development-blue) |
-| `json` | JSON object with known or unknown schema | ![Development](https://img.shields.io/badge/-development-blue) |
-| `speech` | Speech | ![Development](https://img.shields.io/badge/-development-blue) |
-| `text` | Plain text | ![Development](https://img.shields.io/badge/-development-blue) |
 
 <!-- prettier-ignore-end -->
 <!-- END AUTOGENERATED TEXT -->

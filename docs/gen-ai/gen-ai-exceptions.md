@@ -35,27 +35,577 @@ Instrumentations MAY provide a configuration option to populate exception events
 
 **Attributes:**
 
-| Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
-| --- | --- | --- | --- | --- | --- |
-| [`exception.message`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Conditionally Required` [1] | string | The exception message. [2] | `Division by zero`; `Can't convert 'int' object to str implicitly` |
-| [`exception.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Conditionally Required` [3] | string | The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it. [4] | `java.net.ConnectException`; `OSError` |
-| [`exception.stacktrace`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md) | ![Stable](https://img.shields.io/badge/-stable-lightgreen) | `Recommended` | string | A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG. | `Exception in thread "main" java.lang.RuntimeException: Test exception\n at com.example.GenerateTrace.methodB(GenerateTrace.java:13)\n at com.example.GenerateTrace.methodA(GenerateTrace.java:9)\n at com.example.GenerateTrace.main(GenerateTrace.java:5)` |
 
-**[1] `exception.message`:** Required if `exception.type` is not set, recommended otherwise.
 
-**[2] `exception.message`:**
+<a id="gen-ai-client-operation-exception-exception-message"></a>
+
+#### [`exception.message`](#gen-ai-client-operation-exception-exception-message)
+
+The exception message.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` Required if `exception.type` is not set, recommended otherwise.
+
+**Value type:** string
+
+**Registry:** [`exception.message`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md)
 
 > [!WARNING]
 >
 > This attribute may contain sensitive information.
 
-**[3] `exception.type`:** Required if `exception.message` is not set, recommended otherwise.
+**Examples:**
 
-**[4] `exception.type`:** If the recorded exception type is a wrapper that is not meaningful for
+`Division by zero`
+
+`Can't convert 'int' object to str implicitly`
+
+<a id="gen-ai-client-operation-exception-exception-type"></a>
+
+#### [`exception.type`](#gen-ai-client-operation-exception-exception-type)
+
+The type of the exception (its fully-qualified class name, if applicable). The dynamic type of the exception should be preferred over the static type in languages that support it.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` Required if `exception.message` is not set, recommended otherwise.
+
+**Value type:** string
+
+**Registry:** [`exception.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md)
+
+If the recorded exception type is a wrapper that is not meaningful for
 failure classification, instrumentation MAY use the type of the inner
 exception instead. For example, in Go, errors created with `fmt.Errorf`
 using `%w` MAY be unwrapped when the wrapper type does not help
 classify the failure.
+
+**Examples:**
+
+`java.net.ConnectException`
+
+`OSError`
+
+<a id="gen-ai-client-operation-exception-exception-stacktrace"></a>
+
+#### [`exception.stacktrace`](#gen-ai-client-operation-exception-exception-stacktrace)
+
+A stacktrace as a string in the natural representation for the language runtime. The representation is to be determined and documented by each language SIG.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Recommended`
+
+**Value type:** string
+
+**Registry:** [`exception.stacktrace`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/exception.md)
+
+**Examples:**
+
+`E`
+
+`x`
+
+`c`
+
+`e`
+
+`p`
+
+`t`
+
+`i`
+
+`o`
+
+`n`
+
+` `
+
+`i`
+
+`n`
+
+` `
+
+`t`
+
+`h`
+
+`r`
+
+`e`
+
+`a`
+
+`d`
+
+` `
+
+`"`
+
+`m`
+
+`a`
+
+`i`
+
+`n`
+
+`"`
+
+` `
+
+`j`
+
+`a`
+
+`v`
+
+`a`
+
+`.`
+
+`l`
+
+`a`
+
+`n`
+
+`g`
+
+`.`
+
+`R`
+
+`u`
+
+`n`
+
+`t`
+
+`i`
+
+`m`
+
+`e`
+
+`E`
+
+`x`
+
+`c`
+
+`e`
+
+`p`
+
+`t`
+
+`i`
+
+`o`
+
+`n`
+
+`:`
+
+` `
+
+`T`
+
+`e`
+
+`s`
+
+`t`
+
+` `
+
+`e`
+
+`x`
+
+`c`
+
+`e`
+
+`p`
+
+`t`
+
+`i`
+
+`o`
+
+`n`
+
+`\`
+
+`n`
+
+` `
+
+`a`
+
+`t`
+
+` `
+
+`c`
+
+`o`
+
+`m`
+
+`.`
+
+`e`
+
+`x`
+
+`a`
+
+`m`
+
+`p`
+
+`l`
+
+`e`
+
+`.`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`m`
+
+`e`
+
+`t`
+
+`h`
+
+`o`
+
+`d`
+
+`B`
+
+`(`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`j`
+
+`a`
+
+`v`
+
+`a`
+
+`:`
+
+`1`
+
+`3`
+
+`)`
+
+`\`
+
+`n`
+
+` `
+
+`a`
+
+`t`
+
+` `
+
+`c`
+
+`o`
+
+`m`
+
+`.`
+
+`e`
+
+`x`
+
+`a`
+
+`m`
+
+`p`
+
+`l`
+
+`e`
+
+`.`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`m`
+
+`e`
+
+`t`
+
+`h`
+
+`o`
+
+`d`
+
+`A`
+
+`(`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`j`
+
+`a`
+
+`v`
+
+`a`
+
+`:`
+
+`9`
+
+`)`
+
+`\`
+
+`n`
+
+` `
+
+`a`
+
+`t`
+
+` `
+
+`c`
+
+`o`
+
+`m`
+
+`.`
+
+`e`
+
+`x`
+
+`a`
+
+`m`
+
+`p`
+
+`l`
+
+`e`
+
+`.`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`m`
+
+`a`
+
+`i`
+
+`n`
+
+`(`
+
+`G`
+
+`e`
+
+`n`
+
+`e`
+
+`r`
+
+`a`
+
+`t`
+
+`e`
+
+`T`
+
+`r`
+
+`a`
+
+`c`
+
+`e`
+
+`.`
+
+`j`
+
+`a`
+
+`v`
+
+`a`
+
+`:`
+
+`5`
+
+`)`
+
+```
+
+```
 
 <!-- prettier-ignore-end -->
 <!-- END AUTOGENERATED TEXT -->

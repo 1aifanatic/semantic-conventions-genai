@@ -1,9 +1,9 @@
-{% macro render(attr, notes) -%}
+{% macro render(attr, notes, inline=false) -%}
 {%- if attr.level == "recommended" %}`Recommended`
 {% elif attr.level == "required" %}`Required`
 {% elif attr.level == "opt_in" %}`Opt-In`
-{% elif attr.level.conditionally_required %}`Conditionally Required`{{ notes.add_with_limit({"note": attr.level.conditionally_required, "name": attr.name}) }}
-{% elif attr.level.recommended %}`Recommended`{{ notes.add_with_limit({"note": attr.level.recommended, "name": attr.name}) }}
+{% elif attr.level.conditionally_required %}`Conditionally Required`{% if inline %} {{ attr.level.conditionally_required | trim }}{% else %}{{ notes.add_with_limit({"note": attr.level.conditionally_required, "name": attr.name}) }}{% endif %}
+{% elif attr.level.recommended %}`Recommended`{% if inline %} {{ attr.level.recommended | trim }}{% else %}{{ notes.add_with_limit({"note": attr.level.recommended, "name": attr.name}) }}{% endif %}
 {% else %}{{ attr.level }}
 {%- endif %}
 {% endmacro %}
