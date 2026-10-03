@@ -151,7 +151,10 @@ version identifier used by that system.
 
 **[11] `gen_ai.request.top_k`:** This is a decoding/sampling parameter (e.g., Anthropic `top_k`, Cohere `k`, Google `topK`), not an output-shaping parameter. In particular, OpenAI's `top_logprobs` controls how many per-token log-probabilities are returned in the response and does not change generation; it MUST NOT be reported as `gen_ai.request.top_k`.
 
-**[12] `server.port`:** When observed from the client side, and when communicating through an intermediary, `server.port` SHOULD represent the server port behind any intermediaries, for example proxies, if it's available.
+**[12] `server.port`:** The default port for GenAI operations is 443. Instrumentations MAY omit
+this attribute when the server uses the default port.
+Provider-specific conventions MAY define a different default or require
+the port to be recorded when no default applies.
 
 **[13] `azure.resource_provider.namespace`:** When `azure.resource_provider.namespace` attribute is populated, it MUST be set to `Microsoft.CognitiveServices` for all operations performed by Azure AI Inference clients.
 

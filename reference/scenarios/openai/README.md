@@ -1,5 +1,10 @@
 # openai
 
+The basic chat scenario runs against both a local HTTP endpoint with an explicit
+port and the SDK's default HTTPS endpoint. The latter uses a mock transport and
+omits port 443 on the span and token metrics; the former records its non-default
+port. Both read the endpoint from the actual SDK client.
+
 The `openai` client is a **model-call boundary**: it calls the model directly,
 so it owns inference and embeddings. It also owns retrieval
 (the Vector Stores API — `client.vector_stores.search` — and the `file_search`

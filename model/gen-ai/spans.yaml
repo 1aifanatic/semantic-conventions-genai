@@ -33,7 +33,12 @@ attribute_groups:
       - ref: server.port
         brief: GenAI server port.
         requirement_level:
-          conditionally_required: If `server.address` is set.
+          conditionally_required: If `server.address` is set and the port differs from the default (443).
+        note: |
+          The default port for GenAI operations is 443. Instrumentations MAY omit
+          this attribute when the server uses the default port.
+          Provider-specific conventions MAY define a different default or require
+          the port to be recorded when no default applies.
 
   - id: attributes.gen_ai.usage
     visibility: internal

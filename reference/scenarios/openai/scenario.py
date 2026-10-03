@@ -195,7 +195,10 @@ def run_chat_reference(client):
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Say hello."},
     ]
-    host, port = mock_server_host_port(MOCK_BASE_URL)
+    host = client.base_url.host
+    port = client.base_url.port or (443 if client.base_url.scheme == "https" else 80)
+    if port == 443:
+        port = None
     input_messages = json.dumps(
         [{"role": m["role"], "parts": [{"type": "text", "content": m["content"]}]} for m in messages]
     )
@@ -1150,6 +1153,23 @@ def main():
     client = openai.OpenAI(base_url=MOCK_BASE_URL, api_key="mock-key")
 
     run_chat_reference(client)
+    # Exercise the SDK's default HTTPS endpoint while forwarding transport to the local mock.
+    import httpx2
+
+    with httpx2.Client() as mock_transport_client:
+
+        def forward_to_mock(request):
+            return mock_transport_client.post(
+                MOCK_BASE_URL + "/chat/completions",
+                content=request.content,
+                headers={"Content-Type": "application/json"},
+            )
+
+        with openai.OpenAI(
+            api_key="mock-key",
+            http_client=httpx2.Client(transport=httpx2.MockTransport(forward_to_mock)),
+        ) as default_port_client:
+            run_chat_reference(default_port_client)
     run_responses_compaction_reference(client)
     run_responses_continuation_reference(client)
     run_chat_streaming_reference(client)
