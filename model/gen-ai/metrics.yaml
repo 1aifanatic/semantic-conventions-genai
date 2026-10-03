@@ -33,6 +33,9 @@ metrics:
       - ref: gen_ai.provider.name
         requirement_level:
           conditionally_required: If the operation involves a call to a GenAI provider.
+      - ref: gen_ai.conversation.compacted
+        requirement_level:
+          recommended: When context compaction is known to have been applied to the inference operation.
   - name: gen_ai.client.operation.time_to_first_chunk
     requirement_level: recommended
     instrument: histogram

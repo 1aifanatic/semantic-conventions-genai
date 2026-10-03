@@ -244,7 +244,9 @@ def run_compaction(handler):
         )
 
         conversation_compacted = _has_compaction_block_in_input(messages) or _has_compaction_block_in_response(resp)
-        inv.attributes["gen_ai.conversation.compacted"] = conversation_compacted  # -> gen_ai.conversation.compacted
+        if conversation_compacted:
+            inv.attributes["gen_ai.conversation.compacted"] = True
+            inv.metric_attributes["gen_ai.conversation.compacted"] = True
 
         inv.response_model_name = resp.model  # -> gen_ai.response.model
         inv.response_id = resp.id  # -> gen_ai.response.id

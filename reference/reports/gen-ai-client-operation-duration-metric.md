@@ -20,6 +20,7 @@
 
 | Attribute | Supporting Libraries |
 | --- | --- |
+| gen_ai.conversation.compacted | (none) |
 | gen_ai.response.model | [adk_a2a], [agent-framework], [anthropic], [groq] |
 | server.address | [agent-framework], [anthropic], [groq] |
 
