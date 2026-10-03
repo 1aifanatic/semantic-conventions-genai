@@ -61,7 +61,7 @@
 
 | Attribute | Supporting Libraries |
 | --- | --- |
-| gen_ai.input.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [groq], [litellm], [mistralai], [openai] |
+| gen_ai.input.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [google-genai], [groq], [litellm], [mistralai], [openai] |
 | gen_ai.output.messages | [agent-framework], [anthropic], [aws-bedrock], [claude-agent-sdk], [litellm], [mistralai], [openai] |
 | gen_ai.prompt.variable | (none) |
 | gen_ai.system_instructions | [agent-framework] |
