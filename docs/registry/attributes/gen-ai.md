@@ -285,9 +285,8 @@ Instrumentations MUST follow [JSON schema](/model/gen-ai/gen-ai-tool-call-argume
 
 When the attribute is recorded on events, it MUST be recorded in structured form. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.
 
-**[28] `gen_ai.tool.call.id`:** This attribute MUST carry the identifier generated and supplied by the model or provider.
-Instrumentations MUST NOT synthesize, generate, or fall back to local identifiers
-(such as memory addresses or sequential counters) when no provider identifier is available.
+**[28] `gen_ai.tool.call.id`:** This attribute SHOULD be set to the identifier received from the model or provider
+if and only if one was supplied.
 
 **[29] `gen_ai.tool.call.result`:**
 

@@ -1188,9 +1188,8 @@ libraries.
 
 **[4] `gen_ai.tool.call.id`:** If the model or provider supplied a tool call identifier.
 
-**[5] `gen_ai.tool.call.id`:** This attribute MUST carry the identifier generated and supplied by the model or provider.
-Instrumentations MUST NOT synthesize, generate, or fall back to local identifiers
-(such as memory addresses or sequential counters) when no provider identifier is available.
+**[5] `gen_ai.tool.call.id`:** This attribute SHOULD be set to the identifier received from the model or provider
+if and only if one was supplied.
 
 **[6] `gen_ai.tool.description`:**
 
