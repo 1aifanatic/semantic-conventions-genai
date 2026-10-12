@@ -9,6 +9,9 @@ The tool-response scenario passes an existing conversation to the Messages API.
 It preserves the `user` role on the message containing both a tool result and text,
 and records those blocks together as `tool_call_response` and `text` parts.
 
+The scenario publishes inference durations from `opentelemetry-util-genai`
+under `gen_ai.client.inference.duration` using an OTel SDK view.
+
 The same client also drives the **Managed Agents** service (`beta.agents`,
 `beta.sessions`, `beta.memory_stores`), where agents run server-side. The client
 owns the create-agent and invoke-agent client operations; the agent's reasoning,
