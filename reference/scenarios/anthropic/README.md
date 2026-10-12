@@ -6,8 +6,11 @@ points users to third-party embedding providers), so embeddings is out of scope.
 Tool use is supported, but the tool itself runs in application code.
 
 The compaction scenario records `gen_ai.conversation.compacted=true` on the
-inference span and its operation-duration measurement when a compaction block
+inference span and its inference-duration measurement when a compaction block
 is present in the SDK input or response. Other requests omit the attribute.
+
+The scenario publishes inference durations from `opentelemetry-util-genai`
+under `gen_ai.client.inference.duration` using an OTel SDK view.
 
 The same client also drives the **Managed Agents** service (`beta.agents`,
 `beta.sessions`, `beta.memory_stores`), where agents run server-side. The client
