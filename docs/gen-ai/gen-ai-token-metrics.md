@@ -77,6 +77,7 @@ Two families of token instruments are defined:
 
 **[1]:** This metric SHOULD be reported when an operation involves the usage of tokens and the count is readily available.
 When systems report both used tokens and billable tokens, instrumentation MUST report billable tokens.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage. When no usage is received, the `0` is recorded with `gen_ai.token.modality` set to `unknown`.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -337,6 +338,7 @@ When observed from the client side, and when communicating through an intermedia
 
 **[1]:** This metric SHOULD be reported when an operation involves the usage of tokens and the count is readily available.
 When systems report both used tokens and billable tokens, instrumentation MUST report billable tokens.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage. When no usage is received, the `0` is recorded with `gen_ai.token.modality` set to `unknown`.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -596,6 +598,7 @@ When observed from the client side, and when communicating through an intermedia
 | `gen_ai.client.inference.usage.cache_read.input_tokens` | Counter | `{token}` | The number of input tokens served from a provider-managed cache. [1] | ![Development](https://img.shields.io/badge/-development-blue) | |
 
 **[1]:** This value is a subset of `gen_ai.client.inference.usage.input_tokens`.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -855,6 +858,7 @@ When observed from the client side, and when communicating through an intermedia
 | `gen_ai.client.inference.usage.cache_write.input_tokens` | Counter | `{token}` | The number of input tokens written to a provider-managed cache. [1] | ![Development](https://img.shields.io/badge/-development-blue) | |
 
 **[1]:** This value is a subset of `gen_ai.client.inference.usage.input_tokens`.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -1114,6 +1118,7 @@ When observed from the client side, and when communicating through an intermedia
 | `gen_ai.client.inference.usage.reasoning.output_tokens` | Counter | `{token}` | The number of output tokens used for reasoning (e.g. chain-of-thought, extended thinking). [1] | ![Development](https://img.shields.io/badge/-development-blue) | |
 
 **[1]:** This value is a subset of `gen_ai.client.inference.usage.output_tokens`.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -1378,6 +1383,7 @@ This metric SHOULD be specified with [ExplicitBucketBoundaries] of [1, 4, 16, 64
 For example, if GenAI system returns usage information in the streaming response, it SHOULD be used. Or if GenAI system returns each token independently, instrumentation SHOULD count number of output tokens and record the result.
 If instrumentation cannot efficiently obtain number of input and/or output tokens, it MAY allow users to enable offline token counting. Otherwise it MUST NOT report usage metrics.
 When systems report both used tokens and billable tokens, instrumentation MUST report billable tokens.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -1489,6 +1495,43 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 **[3]:** May be used when specific backend is unknown.
 
 **[4]:** Used when accessing the 'aiplatform.googleapis.com' endpoint.
+
+
+<a id="gen-ai-client-inference-operation-input-tokens-error-type"></a>
+
+#### [`error.type`](#gen-ai-client-inference-operation-input-tokens-error-type)
+
+Describes a class of error the operation ended with.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If the operation ended in an error.
+
+**Value type:** string
+
+**Registry:** [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/error.md)
+
+The `error.type` SHOULD match the error code returned by the Generative AI provider or the client library,
+the canonical name of exception that occurred, or another low-cardinality error identifier.
+Instrumentations SHOULD document the list of errors they report.
+
+**Examples:**
+
+`timeout`
+
+`java.net.UnknownHostException`
+
+`server_certificate_invalid`
+
+`500`
+
+---
+
+`error.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `_OTHER` | A fallback error value to be used when the instrumentation doesn't define a custom value. | ![Stable](https://img.shields.io/badge/-stable-lightgreen) |
 
 
 <a id="gen-ai-client-inference-operation-input-tokens-gen-ai-request-model"></a>
@@ -1607,6 +1650,7 @@ This metric SHOULD be specified with [ExplicitBucketBoundaries] of [1, 4, 16, 64
 For example, if GenAI system returns usage information in the streaming response, it SHOULD be used. Or if GenAI system returns each token independently, instrumentation SHOULD count number of output tokens and record the result.
 If instrumentation cannot efficiently obtain number of input and/or output tokens, it MAY allow users to enable offline token counting. Otherwise it MUST NOT report usage metrics.
 When systems report both used tokens and billable tokens, instrumentation MUST report billable tokens.
+Instrumentations SHOULD record this metric for each inference operation, including failed ones. The recorded value SHOULD match the token count returned by the provider, or `0` if the response was not received or did not contain token usage.
 
 **Requirement level:** [Recommended](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/general/signal-requirement-level.md).
 
@@ -1718,6 +1762,43 @@ applicable `aws.bedrock.*` attributes and are not expected to include
 **[3]:** May be used when specific backend is unknown.
 
 **[4]:** Used when accessing the 'aiplatform.googleapis.com' endpoint.
+
+
+<a id="gen-ai-client-inference-operation-output-tokens-error-type"></a>
+
+#### [`error.type`](#gen-ai-client-inference-operation-output-tokens-error-type)
+
+Describes a class of error the operation ended with.
+
+**Stability:** ![Stable](https://img.shields.io/badge/-stable-lightgreen)
+
+**[Requirement level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/):** `Conditionally Required` If the operation ended in an error.
+
+**Value type:** string
+
+**Registry:** [`error.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/error.md)
+
+The `error.type` SHOULD match the error code returned by the Generative AI provider or the client library,
+the canonical name of exception that occurred, or another low-cardinality error identifier.
+Instrumentations SHOULD document the list of errors they report.
+
+**Examples:**
+
+`timeout`
+
+`java.net.UnknownHostException`
+
+`server_certificate_invalid`
+
+`500`
+
+---
+
+`error.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `_OTHER` | A fallback error value to be used when the instrumentation doesn't define a custom value. | ![Stable](https://img.shields.io/badge/-stable-lightgreen) |
 
 
 <a id="gen-ai-client-inference-operation-output-tokens-gen-ai-request-model"></a>
