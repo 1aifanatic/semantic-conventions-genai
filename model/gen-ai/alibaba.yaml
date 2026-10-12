@@ -1,7 +1,7 @@
 file_format: definition/2
 span_refinements:
   - id: alibaba.dashscope.inference.client
-    ref: gen_ai.inference.client
+    ref: gen_ai.client.inference
     brief: Alibaba Cloud Model Studio inference using the DashScope text-generation API.
     note: |
       `gen_ai.provider.name` MUST be set to `alibaba.dashscope` and SHOULD be provided at span creation time.
