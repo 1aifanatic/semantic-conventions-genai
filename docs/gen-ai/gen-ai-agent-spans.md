@@ -193,12 +193,14 @@ Describes GenAI agent invocation over a remote service.
 
 The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-This span SHOULD be emitted if and only if the agent being invoked is not running
-in the same process as the instrumentation.
+This span SHOULD be emitted when the instrumented API represents the target as
+an agent service outside the current process. Instrumentation SHOULD use
+information available from the target's API type or configuration; it is not
+expected to inspect the target's runtime process.
 
-Examples include invocations of remote, managed, or other out-of-process
-agents such as OpenAI Assistants API, AWS Bedrock
-Agents, Gemini Enterprise Agent Platform, or Azure AI Foundry Agent Service.
+Examples include remote agent services accessed through OpenAI Assistants API,
+AWS Bedrock Agents, Gemini Enterprise Agent Platform, Azure AI Foundry Agent
+Service, or an A2A endpoint.
 
 For agent invocations targeting local agents, refer to the
 `gen_ai.invoke_agent.internal` span.
@@ -552,8 +554,10 @@ Describes GenAI agent invocation within the same process.
 
 The `gen_ai.operation.name` SHOULD be `invoke_agent`.
 
-This span SHOULD be emitted if and only if the agent runs locally within the
-calling process.
+This span SHOULD be emitted when the instrumented API represents the target as
+an agent running within the current process. Instrumentation SHOULD use
+information available from the target's API type or configuration; it is not
+expected to inspect the target's runtime process.
 
 Examples include local agent invocations in frameworks such as LangChain,
 CrewAI, AutoGen, or Google ADK.
