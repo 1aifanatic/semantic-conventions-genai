@@ -958,6 +958,11 @@ that the message role is `tool`: some APIs carry tool responses in `user` messag
 Instrumentations SHOULD NOT split a message or change its role solely because it
 contains a tool response alongside other content parts.
 
+When an API represents a tool response as a standalone item without a message role,
+instrumentations SHOULD represent it as a message with the `tool` role and a
+`tool_call_response` part. For example, the OpenAI Responses API represents a tool
+result as a `function_call_output` input item with no role.
+
 > [!NOTE]
 >
 > Recording structured attributes is supported on events (or logs) and may not

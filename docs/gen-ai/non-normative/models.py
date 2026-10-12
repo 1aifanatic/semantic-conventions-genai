@@ -302,7 +302,9 @@ class ChatMessage(BaseModel):
         description=(
             "Role of the entity that created the message. "
             "A tool_call_response part does not imply a tool role; "
-            "Instrumentations SHOULD preserve the role supplied by the provider or framework API."
+            "Instrumentations SHOULD preserve the role supplied by the provider or framework API. "
+            "When an API represents a tool response as a standalone item without a message role, "
+            "instrumentations SHOULD represent it with the role `tool`."
         )
     )
     parts: List[MessagePart] = Field(
