@@ -1,13 +1,13 @@
 # Inference Operation Details Event
 
-> **[Semantic Convention](../../docs/gen-ai/gen-ai-events.md#event-gen_aiclientinferenceoperationdetails)**
+> **[Semantic Convention](../../docs/gen-ai/client-inference.md#event-gen_aiclientinferenceoperationdetails)**
 
 ## Required
 
 | Attribute | Supporting Libraries |
 | --- | --- |
 | gen_ai.operation.name | [anthropic], [aws-bedrock], [azure-ai-inference], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
-| gen_ai.provider.name | [anthropic], [google-genai], [openai], [vertexai] |
+| gen_ai.provider.name | [anthropic], [cohere], [google-genai], [openai], [vertexai] |
 
 ## Conditionally Required
 

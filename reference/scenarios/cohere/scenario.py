@@ -68,6 +68,7 @@ def run_chat(client):
         content = resp.message.content[0].text
         event_attrs = {
             "gen_ai.operation.name": "chat",
+            "gen_ai.provider.name": "cohere",
             "gen_ai.request.model": request_model,
             "gen_ai.input.messages": json.dumps(
                 [{"role": m["role"], "parts": [{"type": "text", "content": m["content"]}]} for m in messages]
