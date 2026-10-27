@@ -248,9 +248,16 @@ or `last_event_id` in the [Google GenAI Interactions API](https://ai.google.dev/
 choices/candidates.
 
 Each position SHOULD contain the finish reason for the corresponding
-choice/candidate. If a finish reason was expected but not received, for
-example because generation failed, was cancelled, or a stream ended before
-the final event, instrumentations SHOULD report `error` for that position
+choice/candidate. If the caller explicitly closes a stream before receiving
+the finish reason, instrumentation SHOULD report `cancelled` for that
+position. This close alone does not indicate an error; instrumentation
+SHOULD NOT report `error` or set `error.type` solely because the caller
+closed the stream. Any usage reported by the provider before the close
+SHOULD be recorded, even if it is not the final total.
+
+If a finish reason was expected but not received for another reason, for
+example because generation failed or a stream ended unexpectedly before the
+final event, instrumentations SHOULD report `error` for that position
 instead of omitting it.
 
 `error` indicates that the generation ended abnormally, whether reported

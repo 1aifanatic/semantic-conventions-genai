@@ -22,6 +22,9 @@ observe.
 | invoke_agent (client) | Yes — a Managed Agents session runs the remote agent | ❌ Not implemented |
 | memory | Yes — Managed Agents memory stores | ❌ Not implemented |
 
+The early-close scenario stops consuming a real Messages stream after its first
+text delta, then records the provider usage available in the stream snapshot.
+
 `invoke_agent` needs care: `beta.sessions.events.send` only queues the user
 event and returns the accepted events. The agent then runs asynchronously (the
 session reports `running`) and its output arrives over

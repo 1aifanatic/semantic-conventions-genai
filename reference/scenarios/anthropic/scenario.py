@@ -155,6 +155,51 @@ def run_chat(handler):
     print(f"    -> {resp.content[0].text[:60]}")
 
 
+def run_chat_cancelled(handler):
+    """Scenario: caller closes a streaming response before its finish event."""
+    print("  [chat_cancelled] close a streaming response after the first text delta")
+    request_model = "claude-sonnet-4-20250514"
+    messages = [{"role": "user", "content": "Tell me a story."}]
+    client = anthropic.Anthropic(base_url=MOCK_BASE_URL, api_key="mock-key")
+    host, port = mock_server_host_port(MOCK_BASE_URL)
+
+    with handler.inference(
+        provider="anthropic",
+        request_model=request_model,
+        server_address=host,
+        server_port=port,
+    ) as inv:
+        inv.attributes["gen_ai.request.stream"] = True
+        (user_message,) = messages
+        inv.input_messages = [InputMessage(role=user_message["role"], parts=[Text(content=user_message["content"])])]
+
+        with client.messages.stream(
+            model=request_model,
+            max_tokens=100,
+            messages=messages,
+        ) as stream:
+            for text in stream.text_stream:
+                print(f"    -> {text[:60]}")
+                break
+            snapshot = stream.current_message_snapshot
+
+        if snapshot.stop_reason is None:
+            inv.finish_reasons = ["cancelled"]
+        else:
+            inv.finish_reasons = [snapshot.stop_reason]
+        inv.response_model_name = snapshot.model
+        inv.response_id = snapshot.id
+        cache_creation = getattr(snapshot.usage, "cache_creation_input_tokens", None) or 0
+        cache_read = getattr(snapshot.usage, "cache_read_input_tokens", None) or 0
+        inv.input_tokens = snapshot.usage.input_tokens + cache_creation + cache_read
+        if cache_creation:
+            inv.attributes["gen_ai.usage.cache_write.input_tokens"] = cache_creation
+        if cache_read:
+            inv.cache_read_input_tokens = cache_read
+        if snapshot.usage.output_tokens > 0:
+            inv.output_tokens = snapshot.usage.output_tokens
+
+
 def _has_compaction_block_in_input(messages):
     """Return True if any input message contains a compaction content block."""
     for message in messages:
@@ -492,6 +537,7 @@ def main():
     )
 
     run_chat(handler)
+    run_chat_cancelled(handler)
     run_compaction(handler)
     run_chat_with_document_input(handler)
     run_chat_with_image_input(handler)
