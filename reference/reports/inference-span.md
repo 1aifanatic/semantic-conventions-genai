@@ -22,7 +22,7 @@
 | gen_ai.request.seed | [openai] |
 | gen_ai.request.stream | [openai] |
 | gen_ai.request.top_k | (none) |
-| server.port | [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [mistralai], [openai] |
+| server.port | [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [litellm], [mistralai], [openai] |
 
 ## Recommended
 
@@ -38,7 +38,7 @@
 | gen_ai.request.temperature | [openai] |
 | gen_ai.request.top_p | [openai] |
 | gen_ai.response.finish_reasons | [adk_a2a], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
-| gen_ai.response.id | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [groq], [litellm], [mistralai], [openai] |
+| gen_ai.response.id | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
 | gen_ai.response.model | [agent-framework], [anthropic], [azure-ai-inference], [azure-openai], [claude-agent-sdk], [google-genai], [groq], [litellm], [mistralai], [openai] |
 | gen_ai.response.time_to_first_chunk | (none) |
 | gen_ai.usage.audio.cache_read.input_tokens | [google-genai], [vertexai] |
@@ -55,7 +55,7 @@
 | gen_ai.usage.text.cache_read.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.text.input_tokens | [google-genai], [vertexai] |
 | gen_ai.usage.text.output_tokens | [google-genai], [vertexai] |
-| server.address | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [mistralai], [openai] |
+| server.address | [agent-framework], [anthropic], [aws-bedrock], [azure-ai-inference], [azure-openai], [cohere], [google-genai], [groq], [litellm], [mistralai], [openai], [vertexai] |
 
 ## Opt-In
 
