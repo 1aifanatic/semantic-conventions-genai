@@ -332,6 +332,63 @@ def run_chat_reference(client):
         print(f"    -> {resp.choices[0].message.content[:60]}")
 
 
+def run_chat_refusal_reference(client):
+    """Scenario: capture refusal text separately from ordinary assistant text."""
+    print("  [chat_refusal] refusal content part (reference implementation)")
+    request_model = "gpt-4o-mini"
+    messages = [
+        {
+            "role": "system",
+            "content": "[FORCE_PLANNER_MULTI_CALL] Task Execution Planner: refuse this structured request.",
+        },
+        {"role": "user", "content": "Return a structured answer."},
+    ]
+    response_format = {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "planner_output",
+            "schema": {
+                "type": "object",
+                "properties": {"answer": {"type": "string"}},
+                "required": ["answer"],
+                "additionalProperties": False,
+            },
+            "strict": True,
+        },
+    }
+    host, port = mock_server_host_port(MOCK_BASE_URL)
+    span_attributes = {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.provider.name": "openai",
+        "gen_ai.request.model": request_model,
+    }
+    if host:
+        span_attributes["server.address"] = host
+    if port is not None:
+        span_attributes["server.port"] = port
+    with _reference_tracer.start_as_current_span(
+        "chat gpt-4o-mini", kind=SpanKind.CLIENT, attributes=span_attributes
+    ) as span:
+        response = client.chat.completions.create(
+            model=request_model,
+            messages=messages,
+            response_format=response_format,
+        )
+        choice = response.choices[0]
+        refusal = choice.message.refusal
+        parts = []
+        if refusal:
+            parts.append({"type": "openai.refusal", "content": refusal})
+        elif choice.message.content:
+            parts.append({"type": "text", "content": choice.message.content})
+        output_messages = [{"role": choice.message.role, "parts": parts}]
+        finish_reasons = chat_finish_reasons(response.choices)
+        span.set_attribute("gen_ai.response.model", response.model)
+        span.set_attribute("gen_ai.response.id", response.id)
+        span.set_attribute("gen_ai.response.finish_reasons", finish_reasons)
+        span.set_attribute("gen_ai.output.messages", json.dumps(output_messages))
+
+
 def run_responses_compaction_reference(client):
     """Scenario: Responses API server-side compaction signal from output items."""
     print("  [responses_compaction] responses with server-side compaction (reference implementation)")
@@ -1251,6 +1308,7 @@ def main():
     client = openai.OpenAI(base_url=MOCK_BASE_URL, api_key="mock-key")
 
     run_chat_reference(client)
+    run_chat_refusal_reference(client)
     run_responses_compaction_reference(client)
     run_responses_continuation_reference(client)
     run_chat_streaming_reference(client)

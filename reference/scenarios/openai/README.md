@@ -17,3 +17,4 @@ Assistants API is covered by the `openai-assistants` scenario).
 
 Embeddings covers successful requests and an SDK error from a mock HTTP response.
 Failed requests record duration and zero input tokens with `error.type`.
+The chat refusal scenario reads `message.refusal` from the SDK response and preserves it as an `openai.refusal` output part while retaining the provider's `stop` finish reason.
