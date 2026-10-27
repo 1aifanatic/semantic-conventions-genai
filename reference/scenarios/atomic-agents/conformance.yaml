@@ -1,0 +1,14 @@
+runner: genai-conformance
+instrumented_library: atomic-agents
+instrumentation_library: atomic-agents
+
+server:
+  run: genai-mock-server --host 127.0.0.1 --port ${PORT}
+
+env:
+  MOCK_LLM_URL: ${MOCK_SERVER_URL}
+  ATOMIC_AGENTS_TRACE_LLM_SPANS: "false"
+
+scenarios:
+  reference:
+    run: uv run --frozen --python 3.12 --project . python scenario.py

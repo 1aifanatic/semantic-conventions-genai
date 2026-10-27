@@ -1,0 +1,130 @@
+{
+  "spans": {
+    "gen_ai.execute_tool.internal": [
+      "gen_ai.operation.name",
+      "gen_ai.tool.call.arguments",
+      "gen_ai.tool.call.result",
+      "gen_ai.tool.description",
+      "gen_ai.tool.name",
+      "gen_ai.tool.type"
+    ],
+    "gen_ai.invoke_agent.internal": [
+      "gen_ai.agent.name",
+      "gen_ai.operation.name",
+      "gen_ai.request.model",
+      "gen_ai.usage.input_tokens",
+      "gen_ai.usage.output_tokens"
+    ]
+  },
+  "events": {},
+  "metrics": {},
+  "findings": [
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.agent.class' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.agent.class"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.context_providers' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.context_providers"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.history.message_count' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.history.message_count"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.input' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.input"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.input_schema' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.input_schema"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.llm.attempts' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.llm.attempts"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.mode' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.mode"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.model' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.model"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.output' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.output"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.output_schema' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.output_schema"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.system_prompt.sha256' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.system_prompt.sha256"
+      }
+    },
+    {
+      "id": "missing_attribute",
+      "message": "Attribute 'atomic_agents.tool.class' does not exist in the registry.",
+      "context": {
+        "attribute_key": "atomic_agents.tool.class"
+      }
+    },
+    {
+      "id": "span_status_ok_set_by_instrumentation",
+      "message": "Span 'execute_tool lookup' has status.code='ok'; instrumentations must leave status UNSET on success (OK is reserved for application code).",
+      "context": {
+        "status_code": "ok"
+      }
+    },
+    {
+      "id": "genai_expected_attribute_missing",
+      "message": "Span 'invoke_agent reference-agent' (operation 'invoke_agent') is missing expected attribute 'gen_ai.response.finish_reasons'",
+      "context": {
+        "missing_attribute": "gen_ai.response.finish_reasons",
+        "operation": "invoke_agent"
+      }
+    },
+    {
+      "id": "span_status_ok_set_by_instrumentation",
+      "message": "Span 'invoke_agent reference-agent' has status.code='ok'; instrumentations must leave status UNSET on success (OK is reserved for application code).",
+      "context": {
+        "status_code": "ok"
+      }
+    }
+  ],
+  "entities": {}
+}

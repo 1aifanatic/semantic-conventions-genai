@@ -1,0 +1,16 @@
+[project]
+name = "atomic-agents-reference-test"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "atomic-agents[observability]==2.15.0",
+    "genai-reference-shared",
+    "instructor==1.17.0",
+    "openai==2.14.0",
+]
+
+[tool.uv.sources]
+genai-reference-shared = { path = "../../shared", editable = true }
+
+[tool.uv]
+package = false
