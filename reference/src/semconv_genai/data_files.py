@@ -1,7 +1,7 @@
 """Loading the committed ``scenarios/<library>/data.json`` files for reports.
 
 The files are written by the conformance runner, which keys every signal by its
-registry name (``gen_ai.inference.client``). Reports address span types by the
+registry name (``gen_ai.client.inference``). Reports address span types by the
 shorter keys in :mod:`semconv_genai.semconv_model`, so span keys are mapped back
 on the way in; events, entities and metrics are already named by the registry.
 """
@@ -22,6 +22,8 @@ from semconv_genai.semconv_model import (
 
 # Display order for span types in reports.
 SPAN_TYPE_ORDER = [
+    "a2a_client",
+    "a2a_server",
     "create_agent",
     "invoke_agent_client",
     "invoke_agent_internal",
